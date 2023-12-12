@@ -28,7 +28,7 @@ private:
 
 public:
     static int progressing;
-    Event::Event();
+    Event();
     Event(vector<string> lines, int len);
     ~Event();
     void readLines(); 
