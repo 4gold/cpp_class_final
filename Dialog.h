@@ -34,7 +34,7 @@ class Dialog{
 
         // 切換為新的dialog
         void updateNpcDialog(const string name, const int phase);
-        void updatePureItemDialog(const string name, bool lock);
+        void updatePureItemDialog(const string name, bool lock, int page);
 };
 
 Dialog::Dialog() {
