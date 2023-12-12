@@ -1,3 +1,5 @@
+#ifndef PLAYER_H
+#define PLAYER_H
 #include<iostream>
 #include<vector>
 #include"PureItem.h"
@@ -78,4 +80,4 @@ int Player::getErosionPoint()
 {
 	return erosionPoint;
 }
-//test
+#endif
