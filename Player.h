@@ -1,7 +1,7 @@
 #include<iostream>
 #include<vector>
 #include"PureItem.h"
-#include"Map.h"
+#include"map.h"
 using namespace std;
 class Player
 {
