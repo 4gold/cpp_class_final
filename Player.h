@@ -80,4 +80,8 @@ int Player::getErosionPoint()
 {
 	return erosionPoint;
 }
+int getRoom()
+{
+	return room;
+}
 #endif
