@@ -1,8 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef MAP_H
+#define MAP_H
 using namespace std;
 
 // 定義Map類別，代表地圖
@@ -101,7 +101,7 @@ public:
     	 for (const auto& roomItemPair : roomItems) {
             cout << "Room " << roomItemPair.first << " items: ";
             for (const auto& item : roomItemPair.second) {
-                cout << item.name << " ";
+                cout << item.getName() << " ";
             }
             cout << endl;
         }
