@@ -35,8 +35,8 @@ public:
     bool checkActive();
     void turnoff();
     void start(int e); // e 為加到 progressing的 Event代號
-    void end(int i, Player& p); // 關閉active, progress, 之後更新地圖連結狀況，i 為開鎖的case, progressing重製為-1
-    bool isEventEnd();
+    void end(int i, Player& p, int s) ; // 關閉active, progress, 之後更新地圖連結狀況，i 為開鎖的case, progressing重製為-1, s為之後準備開始的event編號(加負號)
+    bool isprogressing();
 };
 
 int Event::progressing = -1;
@@ -80,31 +80,31 @@ void Event::turnoff()
     this->active = false;
 }
 
-void Event::start(int e)
+void Event::start(int e) // e為新的progressing
 {   
     this->progressing = e;
     this->progress = true;
     this->readLines();
 }
 
-void Event::end(int i, Player& p)
+void Event::end(int i, Player& p, int s)
 {
     this->progress = false;
     this->turnoff();
     this->presentMap = p.getMap();
     presentMap.updateConnection(i);
     p.updateMap(presentMap);
-    this->progressing = -1;
+    this->progressing = s;
 }
 
-bool Event::isEventEnd()
+bool Event::isprogressing()
 {
-
+    return progress;
 }
 
 class EventManager {
 private:
-    static std::vector<Event*> events;
+    static vector<Event*> events;
 
 public:
     static void addEvent(Event* event) {
@@ -138,16 +138,19 @@ void evenInitializer()
     Event* startEvent = new Event(startEvenLines, startEvenLen);
 
     // 餐廳事件 1
-    int kitchenLen = 7;
+    int kitchenLen = 10;
     vector<string> kitchenLines = {
         " 突然餐桌傳來一聲尖叫：",
         "『我的葡萄！我的葡萄！有人偷了我的葡萄！』",
         " 你看向餐桌，一個表情癲狂的人揮舞著叉子大叫。說完他望向你，眼神充滿猜疑與憤怒",
         "『是你吧！是你偷了吧！』",
-        " 不是",
-        "「不是我偷的，我不知道你在說什麼。」",
-        "「我們都看到了！」"};
-    // 改直接開門
+        " 你 : 不是",
+        " 你 : 「不是我偷的，我不知道你在說什麼。」",
+        "『不然還有誰！除了你還有誰！』",
+        " 你 : 「真的不是我，我不知道！」",
+        " 他沈默了幾秒後，當你以為他被說服了，卻又開始繼續大叫",
+        " ：『我要我的葡萄！沒有葡萄就沒人可以離開！』"
+        };
 
     Event* kitchen = new Event(kitchenLines, kitchenLen);
 
@@ -164,15 +167,48 @@ void evenInitializer()
         " 掛畫上畫著一群穿著同樣衣服的人，牽手圍著某個人，從上方有一道光打在被圍住的人身上。"};
 
     Event* hierarch = new Event(hierarchLines, hierarchLens);
+    // 儀式房 vs 篡位者
+
+    int finalEventLens;
+    vector<string> finalEventLines = {};
+
+    Event* finalEvent = new Event(finalEventLines, finalEventLens);
 
     // 結局1 3
+
+    int ending1Lens;
+    vector<string> ending1Lines{};
+
+    Event* ending1 = new Event(ending1Lines, ending1Lens);
+
     // 結局2 4
+    int ending2Lens;
+    vector<string> ending2Lines{};
+
+    Event* ending2 = new Event(ending2Lines, ending2Lens);
+
     // 結局3 5
+
+    int ending3Lens;
+    vector<string> ending3Lines{};
+
+    Event* ending3 = new Event(ending3Lines, ending3Lens);
     // 結局4 6
 
+    int ending4Lens;
+    vector<string> ending4Lines{};
+
+    Event* ending4 = new Event(ending4Lines, ending4Lens);
+
+    // 放到EventManager
     EventManager::addEvent(startEvent);
     EventManager::addEvent(kitchen);
     EventManager::addEvent(hierarch);
+    EventManager::addEvent(finalEvent);
+    EventManager::addEvent(ending1);
+    EventManager::addEvent(ending2);
+    EventManager::addEvent(ending3);
+    EventManager::addEvent(ending4);
     cout << "event初始化完成" << endl;
 }
 #endif
