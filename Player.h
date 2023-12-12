@@ -78,3 +78,4 @@ int Player::getErosionPoint()
 {
 	return erosionPoint;
 }
+//test
