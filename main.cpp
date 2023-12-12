@@ -14,6 +14,7 @@
 #include "Game.h"
 #include "Event.h"
 
+
 using namespace std;
 
 bool isValidObj(string obj, int Itemcnt, vector<Item> itemsInCurrentRoom)
@@ -115,7 +116,7 @@ int main()
                         startEvent->end(1, p);
                         g.switchMap(1);
 
-                        
+
                     }
                     else
                     {

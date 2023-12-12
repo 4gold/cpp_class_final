@@ -2,6 +2,8 @@
 #include "Player.h"
 using namespace std;
 
+#ifndef STORY_H
+#define STORY_H
 class Story
 {
 private:
@@ -44,3 +46,4 @@ int Story::checkEnding(int sp, int ep)
 
     return 3;   // 結局3
 }
+#endif
