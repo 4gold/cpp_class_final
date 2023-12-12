@@ -1,9 +1,9 @@
-#ifndef PLAYER_H
-#define PLAYER_H
 #include<iostream>
 #include<vector>
 #include"PureItem.h"
 #include"map.h"
+#ifndef PLAYER_H
+#define PLAYER_H
 using namespace std;
 class Player
 {
