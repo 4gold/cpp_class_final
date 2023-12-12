@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#ifndef PLAYER_H
+#define PLAYER_H
 using namespace std;
 
 // 定義Map類別，代表地圖
@@ -116,4 +118,4 @@ public:
         }
     }
 };
-
+#endif
