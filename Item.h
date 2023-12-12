@@ -98,15 +98,15 @@ Item::~Item() {
     }
 }
 
-string Item::getName() {
+string Item::getName() const {
     return this->name;
 }
 
-string Item::getType() {
+string Item::getType() const  {
     return this->type;
 }
 
-bool Item::getDisable() {
+bool Item::getDisable() const{
     return this->disable;
 }
 
