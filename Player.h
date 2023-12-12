@@ -80,7 +80,7 @@ int Player::getErosionPoint()
 {
 	return erosionPoint;
 }
-int getRoom()
+int Player::getRoom()
 {
 	return room;
 }
