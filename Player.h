@@ -12,7 +12,6 @@ private:
 	int sanityPoint;
 	int	erosionPoint;
 	int room;
-	vector<PureItem> bag;
 	Map	map;
 public:
 	Player();
@@ -28,6 +27,7 @@ public:
 	int getSanityPoint();
 	int getErosionPoint();
 	int getRoom();
+	vector<PureItem> bag;
 
 };
 Player::Player()
