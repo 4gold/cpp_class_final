@@ -63,9 +63,9 @@ class Item {
         Item(const string name, const bool disable, const Dialog* dialog, const int effect[4][3]);
         Item(const string name, const bool disable, const int effect[4][3]);
         virtual ~Item();
-        string getName();
-        string getType();
-        bool getDisable();
+        string getName() const;
+        string getType() const;
+        bool getDisable() const;
         // return 對player的影響，dialog直接印在terminal
         virtual int* useItem(INTERACT_TYPE action) { return nullptr; };
         
