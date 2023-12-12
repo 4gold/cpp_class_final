@@ -14,6 +14,9 @@
 
 using namespace std;
 
+#ifndef EVENT_H
+#define EVENT_H
+
 class Event
 {
 private:
@@ -172,3 +175,4 @@ void evenInitializer()
     EventManager::addEvent(hierarch);
     cout << "event初始化完成" << endl;
 }
+#endif

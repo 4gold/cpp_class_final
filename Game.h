@@ -13,6 +13,8 @@
 
 using namespace std;
 
+#ifndef GAME_H
+#define GAME_H
 class Game
 {
 private:
@@ -78,3 +80,4 @@ void Game::switchMap(int newRoom)
     }
     cout << "無效的移動";
 }
+#endif
