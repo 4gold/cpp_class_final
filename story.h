@@ -36,14 +36,9 @@ int Story::checkEnding(int sp, int ep)
 
     if(sp < sanityThreshold1 and ep < erosionThreshold1)
     {
-        return 1; // 結局1
+        return 4; // 結局4(侵蝕度低)
     }
 
-    else if (sp < sanityThreshold2 and ep < erosionThreshold2)
-    {
-        return 2; // 結局2
-    }
-
-    return 3;   // 結局3
+    return 1; // 結局1(侵蝕度高)
 }
 #endif
