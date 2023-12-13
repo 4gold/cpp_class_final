@@ -19,6 +19,7 @@ using namespace std;
 class Dialog{
     friend class HumanItem;
     friend class PureItem;
+    friend class Item;
     private:
         //依序為{talk, Attack, Interact, Observe}
         string* dialogues;
