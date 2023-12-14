@@ -39,6 +39,11 @@ class PureItem : public Item {
         : Item(name, disable, effect), lock(lock), takable(takable), page(page) {
             this->dialog->loadPureItemDialog(this->name, this->lock, this->page);
         };
+        PureItem(const string name, const bool disable,
+                 const bool lock, const bool takable, const int page) 
+        : Item(name, disable), lock(lock), takable(takable), page(page) {
+            this->dialog->loadPureItemDialog(this->name, this->lock, this->page);
+        };
         ~PureItem() {};
 
 };

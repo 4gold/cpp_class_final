@@ -58,6 +58,13 @@ class HumanItem : public Item {
             this->dialog->loadNpcDialog(name, phase);
             this->player = player;
         };
+        HumanItem(const string name, const bool disable, 
+                  const int health, Player* player) 
+        : Item(name, disable), health(health), phase(INIT_PHASE) {
+            this->type = INTERACT_TYPE_H::TYPE_NPC;
+            this->dialog->loadNpcDialog(name, phase);
+            this->player = player;
+        };
 
         ~HumanItem() {};
         
