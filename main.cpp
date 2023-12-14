@@ -53,8 +53,7 @@ bool isValidRoom(const string &obj)
 }
 
 /** 待補:
- * 新手教學
- * 各項東西的初始化(Player, Map)
+ * 各項東西的初始化(Map)
  * 螢幕初始顯示
  * 圖片置放
  * 遊戲內的細部台詞
@@ -94,6 +93,8 @@ int main()
     // 螢幕初始顯示
 
     // 可能一些教學之類的
+
+    cout << "help me" << "來了解遊玩方式";
 
     while (true)
     {
@@ -417,7 +418,7 @@ int main()
     // 通關失敗的後果
     if(!alive)
     {
-        cout << "遊戲失敗";
+        cout << "你覺得沒有辦法再支撐下去了....遊戲失敗";
     }
     else
     {
