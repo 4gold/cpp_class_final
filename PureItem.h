@@ -38,38 +38,25 @@ class PureItem : public Item {
         : Item(name, disable, effect), lock(lock), takable(takable), page(page) {};
         ~PureItem() {};
 
-        static Dialog* defaultOpenDialog;
-        static Dialog* defaultLockDialog;
-
-        int* useItem(INTERACT_TYPE action);
 };
 
-Dialog* PureItem::defaultOpenDialog;
-Dialog* PureItem::defaultLockDialog;
 
-int* PureItem::useItem(INTERACT_TYPE action) {
-    try {
-        if (action == INTERACT_TYPE::TALK) talkedAct();
-        else if (action == INTERACT_TYPE::ATTACK) attackedAct();
-        else if (action == INTERACT_TYPE::INTERACT) interactedAct();
-        else if (action == INTERACT_TYPE::OBSERVE) observedAct();
-    } catch (exception e) {
-        cout << e.what();
-    }
- 
-    return effect[static_cast<int>(action)];
-}
 
 bool PureItem::attackedAct() {
+    defaultAct(INTERACT_TYPE::ATTACK, INTERACT_TYPE_H::TYPE_PUREITEM, static_cast<int>(lock));
     return true;
 }
 bool PureItem::interactedAct() {
+    
+
     return true;
 }
 bool PureItem::talkedAct() {
+    defaultAct(INTERACT_TYPE::TALK, INTERACT_TYPE_H::TYPE_PUREITEM, static_cast<int>(lock));
     return true;
 }
 bool PureItem::observedAct() {
+    defaultAct(INTERACT_TYPE::OBSERVE, INTERACT_TYPE_H::TYPE_PUREITEM, static_cast<int>(lock));
     return true;
 }
 

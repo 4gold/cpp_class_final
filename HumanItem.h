@@ -37,7 +37,7 @@ class HumanItem : public Item {
         bool interactedAct();
         bool talkedAct();
         bool observedAct();
-        void defaultAct(INTERACT_TYPE act);
+
         bool fightSim(int npcHealth, int playerHealth); // 觸發戰鬥
         void setDead(); // 設為死亡
     public:
@@ -59,33 +59,12 @@ class HumanItem : public Item {
         };
 
         ~HumanItem() {};
-
-        static Dialog* defaultAliveDialog;
-        static Dialog* defaultDeadDialog;
-
-        static void initializeDefault();
+   
         void updatePhase();
-        int* useItem(INTERACT_TYPE action);
 };
 
-Dialog* HumanItem::defaultAliveDialog;
-Dialog* HumanItem::defaultDeadDialog;
 
-// 直接印dialog
-int* HumanItem::useItem(INTERACT_TYPE action) {
 
-    try {
-        bool success = true;
-        if (action == INTERACT_TYPE::TALK) success = talkedAct();
-        else if (action == INTERACT_TYPE::ATTACK) success = attackedAct();
-        else if (action == INTERACT_TYPE::INTERACT) success = interactedAct();
-        else if (action == INTERACT_TYPE::OBSERVE) success = observedAct();
-    } catch (exception e) {
-        cout << e.what();
-    }
- 
-    return effect[static_cast<int>(action)];
-}
 
 /* 
     攻擊失敗的結果為：血量理智各-1
@@ -152,7 +131,7 @@ void HumanItem::setDead() {
 bool HumanItem::interactedAct() {
 
     // print dialog
-    defaultAct(INTERACT_TYPE::INTERACT);
+    defaultAct(INTERACT_TYPE::INTERACT, INTERACT_TYPE_H::TYPE_NPC, this->phase);
 
     // 修改相關的物件
     int len = this->relatedItem.size();
@@ -176,31 +155,17 @@ bool HumanItem::interactedAct() {
 }
 
 bool HumanItem::talkedAct() {
-    defaultAct(INTERACT_TYPE::TALK);
+    defaultAct(INTERACT_TYPE::TALK, INTERACT_TYPE_H::TYPE_NPC, this->phase);
     return true;
 }
 
 bool HumanItem::observedAct() {
-    defaultAct(INTERACT_TYPE::OBSERVE);
+    defaultAct(INTERACT_TYPE::OBSERVE, INTERACT_TYPE_H::TYPE_NPC, this->phase);
     return true;
 }
 
-void HumanItem::defaultAct(INTERACT_TYPE act) {
-    string actDialog = this->dialog->getDialog(act);
-    if (actDialog.empty() && this->phase == 0) // dead
-        FuncPool::delayCout(defaultDeadDialog->getDialog(act));
-    else if (actDialog.empty() && this->phase >= 1) // alive default
-        FuncPool::delayCout(defaultAliveDialog->getDialog(act));
-    else // 有台詞
-        FuncPool::delayCout(actDialog);
-}
 
 
-void HumanItem::initializeDefault() {
-    HumanItem::defaultAliveDialog = new Dialog();
-    HumanItem::defaultAliveDialog->loadNpcDialog("default", 1);
-    HumanItem::defaultDeadDialog = new Dialog();
-    HumanItem::defaultDeadDialog->loadNpcDialog("default", 0);
-}
+
 
 #endif

@@ -4,6 +4,7 @@
 #include<vector>
 #include "Dialog.h"
 #include "InteractType.h"
+#include "FuncPool.h"
 
 #ifndef ITEM_H
 #define ITEM_H
@@ -50,6 +51,7 @@ class Item {
         virtual bool observedAct() {return true; };
         void updateEffect(const INTERACT_TYPE action, const int hp, const int sanity, const int erosion);
         void updateDisable(); // 更新disable狀態，會自動設為與現在相反的
+        void defaultAct(INTERACT_TYPE act, string type, int determinant);
     public:
         void addRelatedItem(Item* it, RELATED_STATE rs); // 新增關聯道具與相關性
         /*
@@ -67,9 +69,21 @@ class Item {
         string getType() const;
         bool getDisable() const;
         // return 對player的影響，dialog直接印在terminal
-        virtual int* useItem(INTERACT_TYPE action) { return nullptr; };
+        int* useItem(INTERACT_TYPE action);
+
+        static Dialog* defaultAliveDialog;
+        static Dialog* defaultDeadDialog;
+        static Dialog* defaultOpenDialog;
+        static Dialog* defaultLockDialog;
+
+        static void initializeDefault();
         
 };
+
+Dialog* Item::defaultAliveDialog;
+Dialog* Item::defaultDeadDialog;
+Dialog* Item::defaultOpenDialog;
+Dialog* Item::defaultLockDialog;
 
 Item::Item() {
     this->dialog = new Dialog();
@@ -98,6 +112,7 @@ Item::~Item() {
     }
 }
 
+
 string Item::getName() const {
     return this->name;
 }
@@ -108,6 +123,19 @@ string Item::getType() const  {
 
 bool Item::getDisable() const{
     return this->disable;
+}
+
+int* Item::useItem(INTERACT_TYPE action) {
+    try {
+        if (action == INTERACT_TYPE::TALK) talkedAct();
+        else if (action == INTERACT_TYPE::ATTACK) attackedAct();
+        else if (action == INTERACT_TYPE::INTERACT) interactedAct();
+        else if (action == INTERACT_TYPE::OBSERVE) observedAct();
+    } catch (exception e) {
+        cout << e.what();
+    }
+ 
+    return effect[static_cast<int>(action)];
 }
 
 void Item::updateEffect(const INTERACT_TYPE action, const int hp, const int sanity, const int erosion) {
@@ -122,6 +150,36 @@ void Item::updateDisable() {
 void Item::addRelatedItem(Item* it, RELATED_STATE rs){
     this->relatedItem.push_back(new pair<Item*, RELATED_STATE>(it, rs));
 };
+
+void Item::defaultAct(INTERACT_TYPE act, string type, int determinant) {
+    // 區分Item類別決定使用哪個default
+    Dialog* defaultDeadOrLockDialog;
+    Dialog* defaultAliveOrOpenDialog;
+
+    if (type == INTERACT_TYPE_H::TYPE_PUREITEM) {
+        defaultDeadOrLockDialog = Item::defaultLockDialog;
+        defaultAliveOrOpenDialog = Item::defaultOpenDialog;
+    } else if (type == INTERACT_TYPE_H::TYPE_NPC) {
+        defaultDeadOrLockDialog = Item::defaultDeadDialog;
+        defaultAliveOrOpenDialog = Item::defaultAliveDialog;
+    }
+
+    // print 對應的台詞
+    string actDialog = this->dialog->getDialog(act);
+    if (actDialog.empty() && determinant == 0) // dead
+        FuncPool::delayCout(defaultDeadOrLockDialog->getDialog(act));
+    else if (actDialog.empty() && determinant >= 1) // alive default
+        FuncPool::delayCout(defaultAliveOrOpenDialog->getDialog(act));
+    else // 有台詞
+        FuncPool::delayCout(actDialog);
+}
+
+void Item::initializeDefault() {
+    Item::defaultAliveDialog = new Dialog();
+    Item::defaultAliveDialog->loadNpcDialog("default", 1);
+    Item::defaultDeadDialog = new Dialog();
+    Item::defaultDeadDialog->loadNpcDialog("default", 0);
+}
 
 
 
