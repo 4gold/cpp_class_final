@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include "FuncPool.h"
 #ifndef MAP_H
 #define MAP_H
 using namespace std;
@@ -79,27 +80,28 @@ public:
     bool isValidMove(Room currentRoom, Room nextRoom) {
      auto connection = roomConnections.find(make_pair(currentRoom, nextRoom));
         if (connection != roomConnections.end()&&connection->second) {
+
         	switch(nextRoom){
         		case 0:
         			cout<<"你靠著微弱的光線，隱約認出這是個石質的房間。地板上散落著一些東西，而房間中央有一個奇怪的的盆子。門的對面有個櫃子靠在牆上。"<<endl;
         			break;
                 case 2:
-                    cout<<"餐廳ASCII.txt"<<endl;
+                    FuncPool::readAndPrintFile("餐廳ASCII.txt"); 
         			break;
         		case 4:
+                    FuncPool::readAndPrintFile("東長廊ASCII.txt");
         			cout<<"右邊的長廊上有幾個呆站的人，穿著一樣的精緻衣服。"<<endl;
-                    cout<<"東長廊ASCII.txt"<<endl;
         			break;
         		case 5:
         			cout<<"左邊的長廊，牆上精緻的牆面雕刻，和一些標語。"<<endl;
         			break;
         		case 8:
+                    FuncPool::readAndPrintFile("主教房ASCII.txt");
         			cout<<"奢華、井井有條、燈光明亮但優雅。"<<endl;
-                    cout<<"主教房ASCII.txt"<<endl;
         			break;
         		case 9:
+                    FuncPool::readAndPrintFile("實驗室ASCII.txt");
         			cout<<"穿過掛畫後的空間，是充滿奇怪瓶瓶罐罐的實驗室，正中間有一個乾淨的實驗床。"<<endl;
-                    cout<<"實驗室ASCII.txt"<<endl;
         			break;
 			}
             return true;
