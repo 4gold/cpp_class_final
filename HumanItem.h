@@ -7,6 +7,7 @@
 #include "Item.h"
 #include "InteractType.h"
 #include "Dialog.h"
+#include "Player.h"
 
 #ifndef HUMANITEM_H
 #define HUMANITEM_H
@@ -28,6 +29,7 @@ class HumanItem : public Item {
            當health歸零時，phase = 0
         */
         int phase; 
+        Player* player;
         
         bool attackedAct();
         bool interactedAct();
@@ -43,20 +45,21 @@ class HumanItem : public Item {
             this->type = INTERACT_TYPE_H::TYPE_NPC;
         };
         HumanItem(const string name, const bool disable, const Dialog* dialog, const int effect[4][3],
-                  const int health) 
+                  const int health, Player* player) 
         : Item(name, disable, dialog, effect), health(health), phase(INIT_PHASE) {
             this->type = INTERACT_TYPE_H::TYPE_NPC;
             this->dialog->loadNpcDialog(name, phase);
+            this->player = player;
         };
         HumanItem(const string name, const bool disable, const int effect[4][3],
-                  const int health) 
+                  const int health, Player* player) 
         : Item(name, disable, effect), health(health), phase(INIT_PHASE) {
             this->type = INTERACT_TYPE_H::TYPE_NPC;
             this->dialog->loadNpcDialog(name, phase);
+            this->player = player;
         };
 
         ~HumanItem() {};
-   
         
 };
 
@@ -70,7 +73,7 @@ bool HumanItem::attackedAct() {
     // 未有設特殊的內容，直接開始攻擊
     if (attackedDialog.empty() && phase != 0) {
         int npcHealth = health;
-        int playerHealth = 5;
+        int playerHealth = player->getHealthPoint();
         bool fightResult = fightSim(npcHealth, playerHealth);
         if (fightResult) {
             updateEffect(INTERACT_TYPE::ATTACK, 0, 0, 0);
@@ -94,8 +97,8 @@ bool HumanItem::fightSim(int npcHealth, int playerHealth) {
     while (npcHealth > 0 && playerHealth > 0) {
 
         // random generate hit
-        int playerHit = ((double) rand()/ RAND_MAX )* 2 + 1;
-        int npcHit = ((double) rand()/ RAND_MAX )* 2 + 1;
+        int playerHit = ((double) rand()/ RAND_MAX )* 30 + 1;
+        int npcHit = ((double) rand()/ RAND_MAX )* 20 + 1;
 
         string playerAttackStr = "你的攻擊對" + this->name + "造成" + to_string(playerHit) + "點傷害";
         string npcAttackStr = this->name + "的攻擊對你造成" + to_string(npcHit) + "點傷害";
@@ -162,7 +165,5 @@ bool HumanItem::observedAct() {
 int HumanItem::updatePhase() {
     return ++(this->phase);
 }
-
-
 
 #endif

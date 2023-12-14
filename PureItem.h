@@ -43,8 +43,6 @@ class PureItem : public Item {
 
 };
 
-
-
 bool PureItem::attackedAct() {
     defaultAct(INTERACT_TYPE::ATTACK, INTERACT_TYPE_H::TYPE_PUREITEM, static_cast<int>(lock));
     return true;
@@ -52,7 +50,7 @@ bool PureItem::attackedAct() {
 
 bool PureItem::interactedAct() {
     // print dialog
-    defaultAct(INTERACT_TYPE::INTERACT, INTERACT_TYPE_H::TYPE_NPC, static_cast<int>(this->lock));
+    defaultAct(INTERACT_TYPE::INTERACT, INTERACT_TYPE_H::TYPE_PUREITEM, static_cast<int>(this->lock));
 
     // 修改相關的物件
     int len = this->relatedItem.size();
