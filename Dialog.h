@@ -67,7 +67,8 @@ void Dialog::updateNpcDialog(const string name, const int phase) {
     loadNpcDialog(name, phase);
 };
 
-// 
+// true = lock/ false = open
+// 如果page = 0 表示不需換頁，多頁
 void Dialog::updatePureItemDialog(const string name, bool lock, int page) {
     loadPureItemDialog(name, lock, page);
 };
@@ -79,7 +80,9 @@ void Dialog::loadNpcDialog(string name, int phase) {
 }
 
 void Dialog::loadPureItemDialog(string name, bool lock, int page) {
-
+    if (this->dialogues != nullptr)
+        delete [] this->dialogues;
+    this->dialogues = DialogStrings::getDialogPureItemString(name, lock, page);
 }
 
 

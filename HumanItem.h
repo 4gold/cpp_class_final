@@ -3,14 +3,10 @@
 #include<cstdlib>
 #include<time.h>
 
-#include <chrono>
-#include <thread>
 
+#include "Item.h"
 #include "InteractType.h"
 #include "Dialog.h"
-#include "Item.h"
-#include "FuncPool.h"
-#include "PureItem.h"
 
 #ifndef HUMANITEM_H
 #define HUMANITEM_H
@@ -40,6 +36,7 @@ class HumanItem : public Item {
 
         bool fightSim(int npcHealth, int playerHealth); // 觸發戰鬥
         void setDead(); // 設為死亡
+        int updatePhase();
     public:
         
         HumanItem() : Item(), health(5), phase(INIT_PHASE){
@@ -60,10 +57,8 @@ class HumanItem : public Item {
 
         ~HumanItem() {};
    
-        void updatePhase();
+        
 };
-
-
 
 
 /* 
@@ -140,13 +135,13 @@ bool HumanItem::interactedAct() {
         Item* changeItem = this->relatedItem.back()->first;
 
         if (changeTarget == RELATED_STATE::DISABLE) { // 將對象修改為可用／不可用。
-            ((HumanItem*)changeItem)->updateDisable();
+            (changeItem)->updateDisable();
         } else if (changeTarget == RELATED_STATE::PHASE) { // phase 改變，台詞要跟著改變。
-            ((HumanItem*) changeItem)->dialog->updateNpcDialog(
-                changeItem->getName(), ++(((HumanItem*) changeItem)->phase)
+            ((HumanItem*)changeItem)->dialog->updateNpcDialog(
+                changeItem->getName(), updatePhase()
             );
         } else if (changeTarget == RELATED_STATE::LOCK) { // lock 改變，台詞要跟著改變。
-            ((PureItem*) changeItem)->updateLock();
+            (changeItem)->updateLock();
         }
         relatedItem.pop_back();           
     } 
@@ -164,7 +159,9 @@ bool HumanItem::observedAct() {
     return true;
 }
 
-
+int HumanItem::updatePhase() {
+    return ++(this->phase);
+}
 
 
 
