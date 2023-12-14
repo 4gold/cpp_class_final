@@ -32,6 +32,15 @@ class FuncPool {
             std::this_thread::sleep_for(std::chrono::milliseconds(TEXT_INTERVAL_MILSEC));
         };
 
+        static void readAndPrintFile(string fileName) {
+            std::ifstream filein(fileName);
+            for (std::string line; std::getline(filein, line); ) 
+            {
+                std::cout << line << std::endl;
+            }
+            filein.close();
+        }
+
 };
 
 #endif

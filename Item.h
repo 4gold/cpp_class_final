@@ -62,6 +62,7 @@ class Item {
         Item();
         Item(const string name, const bool disable, const Dialog* dialog, const int effect[4][3]);
         Item(const string name, const bool disable, const int effect[4][3]);
+        Item(const string name, const bool disable);
         virtual ~Item();
         string getName() const;
         string getType() const;
@@ -110,6 +111,17 @@ Item::Item(const string name, const bool disable, const int effect[4][3]) {
     this->name = name;
     this->disable = disable;
     this->dialog = new Dialog();
+}
+
+Item::Item(const string name, const bool disable) {
+    this->name = name;
+    this->disable = disable;
+    this->dialog = new Dialog();
+    for (int i = 0; i < INTERACT_TYPE_CNT; i++) {
+        for (int j = 0; j < 3; j++)
+            this->effect[i][j] = 0;
+    }
+    
 }
 
 Item::~Item() {
