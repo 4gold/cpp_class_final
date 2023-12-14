@@ -151,7 +151,7 @@ string* DialogStrings::getDialogPureItemString(const string name, const bool loc
             if (lock) {
                 setDialogStrings(ds, 
                 "",
-                "木櫃的板子破了，木片刺傷了你的手（hp-1）。\n 破掉的櫃子後面是一條小路。",
+                "木櫃的板子破了，木片刺傷了你的手。\n 破掉的櫃子後面是一條小路。",
                 "木櫃被什麼東西卡住了，推不動。",
                 "有些年頭的木質櫃子，上面沒有放任何東西。你敲了敲櫃子，後面好像是空心的。");
             } else {
@@ -167,8 +167,16 @@ string* DialogStrings::getDialogPureItemString(const string name, const bool loc
             setDialogStrings(ds, 
             "",
             "櫃子已經破了。",
-            "move",
+            "",
             "破了個大洞的櫃子，從洞後面露出一條小路。");  
+            break;  
+
+        case "diary_lab"_hash:
+            setDialogStrings(ds, 
+            "19xx.10.11 \n實驗對象:S014, 14 歲, 男_報廢\n實驗方法:注射, 20ml \n實驗結果:注射後3分鐘開始嚴重的精神錯亂, 試圖攻擊實驗者 \n---@--@---19xx.10.12 \n實驗對象:S016, 13歲, 女_報廢\n實驗方法:注射, 10ml \n實驗結果:與S014相同\n\n備注:不是劑量問題,需要想別的方法\n---@--@---19xx.11.15\n實驗對象:S025, 12歲, 女\n實驗方法:以鮮血引導其主動進入受試者\n實驗結果:受試者產生強烈幻覺, 精神恍惚\n\n備註:S025受母蠱控制\n19xx.11.25\n加註:S025在看到反射物體時, 陷入嚴重的恐慌症, 移除房間內所有的反光物體\n---@--@---最後一頁是一行混亂的筆跡\n該死的, S025不見了! 其他實驗體也都融的一點不剩了! 到底怎麼回事!\n\n (這是最後一頁了) ",
+            "",
+            "",
+            "一本記載著不明實驗紀錄的本子。");  
             break;  
         case "default"_hash:
             if (lock)
@@ -186,6 +194,7 @@ string* DialogStrings::getDialogPureItemString(const string name, const bool loc
                 "你已經使用過這個道具。"
                 );
             break;
+        
         default:
             setDialogStrings(ds, 
             "",

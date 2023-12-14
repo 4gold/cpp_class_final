@@ -53,8 +53,7 @@ bool isValidRoom(const string &obj)
 }
 
 /** 待補:
- * 新手教學
- * 各項東西的初始化(Player, Map)
+ * 各項東西的初始化(Map)
  * 螢幕初始顯示
  * 圖片置放
  * 遊戲內的細部台詞
@@ -62,6 +61,8 @@ bool isValidRoom(const string &obj)
  * 理智值事件(?)
  * 血量提醒(?)
  * 儲存可前往的room以供help()查詢
+ * 
+ * 修改血量 理智值的function()
  *  */
 int main()
 {
@@ -92,6 +93,8 @@ int main()
     // 螢幕初始顯示
 
     // 可能一些教學之類的
+
+    cout << "help me" << "來了解遊玩方式";
 
     while (true)
     {
@@ -311,7 +314,7 @@ int main()
                         if (ending = 1) // 侵蝕度高->結局1
                         {   
                             cout << "台詞";
-                            finalEvent->end(0, p, 4);
+                            finalEvent->end(1, p, 4);
                             finalEvent->turnoff();
                             ending1->start(4);
                             break;
@@ -319,7 +322,7 @@ int main()
                         else if (ending = 4) // 侵蝕度低->結局4
                         {
                             cout << "台詞";
-                            finalEvent->end(0, p, 7);
+                            finalEvent->end(1, p, 7);
                             finalEvent->turnoff();
                             ending4->start(7);
                             break;
@@ -328,7 +331,7 @@ int main()
                     else // 鏡子沒蒐集齊->結局2
                     {   
                         cout << "台詞";
-                        finalEvent->end(0, p, 5);
+                        finalEvent->end(1, p, 5);
                         finalEvent->turnoff();
                         ending4->start(7);
                         alive = false;
@@ -339,7 +342,7 @@ int main()
             else if (ans == 2) // 答錯，進入結局2
             {   
                 cout << "台詞";
-                finalEvent->end(0, p, 5);
+                finalEvent->end(1, p, 5);
                 finalEvent->turnoff();
                 ending4->start(7);
                 alive = false;
@@ -348,7 +351,7 @@ int main()
             else // 答錯，進入結局2
             {
                 cout << "亂答台詞";
-                finalEvent->end(0, p, 5);
+                finalEvent->end(1, p, 5);
                 finalEvent->turnoff();
                 ending4->start(7);
                 alive = false;
@@ -415,7 +418,7 @@ int main()
     // 通關失敗的後果
     if(!alive)
     {
-        cout << "遊戲失敗";
+        cout << "你覺得沒有辦法再支撐下去了....遊戲失敗";
     }
     else
     {
