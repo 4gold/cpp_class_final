@@ -128,7 +128,9 @@ void Game::switchMap(int newRoom)
 }
 
 void Game::help()
-{
+{   
+    int hp = pPtr->getHealthPoint();
+    cout << "你當前的血量 : " << hp << endl;
     cout << "以下是可使用指令" << endl;
     cout << "attack, talk, interact, observe" << endl;
     cout << "可作用對象為房間內的人/物" << endl;
