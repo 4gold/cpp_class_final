@@ -52,6 +52,10 @@ bool isValidRoom(const string &obj)
     return false;
 }
 
+void initializeAllItems(map<string, Item*> &items, Player* player);
+void putItemsInRoom(map<string, Item*> &items, Map& map);
+
+
 /** 待補:
  * 各項東西的初始化(Map)
  * 螢幕初始顯示
@@ -65,7 +69,7 @@ bool isValidRoom(const string &obj)
  * 修改血量 理智值的function()
  *  */
 int main()
-{
+{   
     // 初始化
     int eventProgress;
     int ending = 0; // 0 : 還沒決定結局 1: 侵蝕度低 4: 侵蝕度高
@@ -75,6 +79,11 @@ int main()
     Game g = Game();
     Map m = Map();
     Story story = Story();
+
+    map<string, Item*> allItems;
+    initializeAllItems(allItems, pPtr);
+    putItemsInRoom(allItems, map);
+
     evenInitializer();
     Event *startEvent = EventManager::getEvent(0);
     Event *kitchen = EventManager::getEvent(1);
@@ -426,4 +435,135 @@ int main()
     }
 
     return 0;
+}
+
+
+void initializeAllItems(map<string, Item*> &items, Player* player) {
+
+    // 初始化static的預設對話
+    HumanItem::initializeDefault();
+    // ------------- key items ----------------------
+    int effect[4][3] = {{0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}};
+    HumanItem* cook = new HumanItem("cook", false, effect, 100, player);
+    HumanItem* usurper = new HumanItem("usurper", true, effect, 100, player);
+    HumanItem* weird_grape_guy = new HumanItem("weird_grape_guy", false, effect, 100, player);
+
+    int effect2[4][3] = {{0,0,0}, {-10,0,0}, {0,0,0}, {0,0,0}};
+    PureItem* cabinet = new PureItem("cabinet", false, effect2, true, false, 0);
+    PureItem* long_candlestick = new PureItem("long_candlestick", false, false, true, 0);
+    PureItem* grape = new PureItem("grape", true, false, true, 0);
+
+    int effect3[4][3] = {{0,0,0}, {0,-10,10}, {0,0,0}, {0,-1,1}};
+    PureItem* painting_on_wall = new PureItem("painting_on_wall", false, effect3, true, false, 0);
+    PureItem* door_leader_to_west_hallway = new PureItem("door_leader_to_west_hallway", false, false, false, 0);
+    PureItem* sculpture = new PureItem("sculpture", false, true, false, 0);
+
+    PureItem* diary_lab = new PureItem("diary_lab", false, false, false, 6);
+    PureItem* trash_can = new PureItem("trash_can", true, false, false, 0);
+    
+    PureItem* key_to_outside = new PureItem("key_to_outside", false, false, true, 0);
+    PureItem* sink = new PureItem("sink", false, true, false, 0);
+
+    PureItem* drawer = new PureItem("drawer", true, false, false, 0);
+    PureItem* diary_player = new PureItem("diary_player", false, true, false, 6);
+    PureItem* plush_toy = new PureItem("plush_toy", false, false, true, 0);
+
+    PureItem* piece_of_mirror_1 = new PureItem("piece_of_mirror_1", true, false, true, 0); // player's room
+    PureItem* piece_of_mirror_2 = new PureItem("piece_of_mirror_2", true, false, true, 0); // lab
+    PureItem* piece_of_mirror_3 = new PureItem("piece_of_mirror_3", true, false, true, 0); // kitchen
+
+    PureItem* god_pearl = new PureItem("god_pearl", true, false, true, 0);
+
+    // -----------設定物品間交互--------------
+    // 1. 篡位者交流後將降神珠設為可見
+    usurper->addRelatedItem(god_pearl, RELATED_STATE::DISABLE);
+
+    // 2. 廚房葡萄事件
+    weird_grape_guy->addRelatedItem(grape, RELATED_STATE::DISABLE);
+    grape->addRelatedItem(weird_grape_guy, RELATED_STATE::PHASE);
+
+    // 3. 儀式房長燭台
+    long_candlestick->addRelatedItem(cabinet, RELATED_STATE::LOCK);
+    
+    // 4. 離開房間雕像倒下事件
+    door_leader_to_west_hallway->addRelatedItem(sculpture, RELATED_STATE::LOCK);
+    door_leader_to_west_hallway->addRelatedItem(painting_on_wall, RELATED_STATE::LOCK);
+
+    // 5. 實驗室日記交流後出現垃圾桶，垃圾桶交流後出現鏡子碎片2
+    diary_lab->addRelatedItem(trash_can, RELATED_STATE::DISABLE);
+    trash_can->addRelatedItem(piece_of_mirror_2, RELATED_STATE::DISABLE);
+    
+
+    // 6. 主角日記交流後出現抽屜
+    diary_player->addRelatedItem(drawer, RELATED_STATE::DISABLE);
+
+    // 7. 抽屜交流後出現鏡子碎片1
+    drawer->addRelatedItem(piece_of_mirror_1, RELATED_STATE::DISABLE);
+
+    // 8. 水槽交流後出現鏡子碎片3
+    sink->addRelatedItem(piece_of_mirror_3, RELATED_STATE::DISABLE);
+
+    // 9. 羊寶寶玩偶交流後廚師狀態變更
+    plush_toy->addRelatedItem(cook, RELATED_STATE::LOCK);
+
+    // not important items
+    PureItem* deadbody_ritaul_room = new PureItem();
+    PureItem* basin;
+    PureItem* door_to_outside;
+    PureItem* broken_cabinet;
+    PureItem* table_restaurant;
+
+    // -------------------- insert items-------------------------------
+    items.insert(pair<string, Item*>("cook", cook));
+    items.insert(pair<string, Item*>("usurper", usurper));
+    items.insert(pair<string, Item*>("weird_grape_guy", weird_grape_guy));
+
+    items.insert(pair<string, Item*>("cabinet", cabinet));
+    items.insert(pair<string, Item*>("long", long_candlestick));
+    items.insert(pair<string, Item*>("grape", grape));
+
+    items.insert(pair<string, Item*>("painting_on_wall", painting_on_wall));
+    items.insert(pair<string, Item*>("door_leader_to_west_hallway", door_leader_to_west_hallway));
+    items.insert(pair<string, Item*>("sculpture", sculpture));
+
+    items.insert(pair<string, Item*>("diary_lab", diary_lab));
+    items.insert(pair<string, Item*>("trash_can", trash_can));
+
+    items.insert(pair<string, Item*>("sink", sink));
+    items.insert(pair<string, Item*>("key_to_outside", key_to_outside));
+
+    items.insert(pair<string, Item*>("diary_player", diary_player));
+    items.insert(pair<string, Item*>("drawer", drawer));
+    items.insert(pair<string, Item*>("plush_toy", plush_toy));
+    items.insert(pair<string, Item*>("piece_of_mirror_1", piece_of_mirror_1));
+    items.insert(pair<string, Item*>("piece_of_mirror_2", piece_of_mirror_2));
+    items.insert(pair<string, Item*>("piece_of_mirror_3", piece_of_mirror_3));
+    items.insert(pair<string, Item*>("god_pearl", god_pearl));
+}
+
+void putItemsInRoom(map<string, Item*> &items, Map& map) {
+    map.addItemToRoom(map.ritualRoom, *(items.find("long_candlestick")->second));
+    map.addItemToRoom(map.ritualRoom, *(items.find("cabinet")->second));
+    map.addItemToRoom(map.ritualRoom, *(items.find("usurper")->second));
+
+    map.addItemToRoom(map.storageRoom, *(items.find("grape")->second));
+
+    map.addItemToRoom(map.restaurant, *(items.find("cook")->second));
+    map.addItemToRoom(map.restaurant, *(items.find("weird_grape_guy")->second));
+
+    map.addItemToRoom(map.leaderRoom, *(items.find("door_leader_to_west_hallway")->second));
+    map.addItemToRoom(map.leaderRoom, *(items.find("painting_on_wall")->second));
+    map.addItemToRoom(map.leaderRoom, *(items.find("sculpture")->second));
+
+    map.addItemToRoom(map.laboratory, *(items.find("diary_lab")->second));
+    map.addItemToRoom(map.laboratory, *(items.find("trash_can")->second));
+    map.addItemToRoom(map.laboratory, *(items.find("piece_of_mirror_2")->second));
+
+    map.addItemToRoom(map.kitchen, *(items.find("sink")->second));
+    map.addItemToRoom(map.kitchen, *(items.find("piece_of_mirror_3")->second));
+
+    map.addItemToRoom(map.protagonistRoom, *(items.find("plush_toy")->second));
+    map.addItemToRoom(map.protagonistRoom, *(items.find("piece_of_mirror_1")->second));
+    map.addItemToRoom(map.protagonistRoom, *(items.find("diary_player")->second));
+    map.addItemToRoom(map.protagonistRoom, *(items.find("drawer")->second));
 }
