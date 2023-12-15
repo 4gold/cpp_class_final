@@ -26,10 +26,10 @@ class FuncPool {
             cout << t << (changeLine ? "\n" : "");
             std::this_thread::sleep_for(std::chrono::milliseconds(TEXT_INTERVAL_MILSEC));
         };
+
         template<typename T>
         static void delayCout(T t){
-            cout << t << "\n";
-            std::this_thread::sleep_for(std::chrono::milliseconds(TEXT_INTERVAL_MILSEC));
+            delayCout(t, true);
         };
 
         static void readAndPrintFile(string fileName) {

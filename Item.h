@@ -60,6 +60,7 @@ class Item {
         */       
         vector<pair<Item*, RELATED_STATE>*> relatedItem; 
         Item();
+        Item(const Item& item);
         Item(const string name, const bool disable, const Dialog* dialog, const int effect[4][3]);
         Item(const string name, const bool disable, const int effect[4][3]);
         Item(const string name, const bool disable);
@@ -67,6 +68,7 @@ class Item {
         string getName() const;
         string getType() const;
         bool getDisable() const;
+        virtual bool getTakable() const;
         // return 1/0 as true/false, return -1 if it's not PureItem.
         virtual int updateLock() { return -1;}; 
         // return phase if it's HumanItem, return -1 if not.
@@ -98,6 +100,15 @@ Dialog* Item::defaultLockDialog;
 
 Item::Item() {
     this->dialog = new Dialog();
+}
+
+Item::Item(const Item& item) {
+    this->dialog = new Dialog(*(item.dialog));
+    this->name = item.name;
+    this->type = item.type;
+    this->disable = item.disable;
+    this->relatedItem = item.relatedItem;
+    std::copy(&(item.effect[0][0]), &(item.effect[0][0]) + 4 * 3, &(this->effect[0][0])); // deep copy dialog
 }
 
 Item::Item(const string name, const bool disable, const Dialog* dialog, const int effect[4][3]) {
@@ -146,6 +157,11 @@ string Item::getType() const  {
 bool Item::getDisable() const{
     return this->disable;
 }
+
+bool Item::getTakable() const {
+    return false;
+}
+
 // 根據對應的動作使用物品。
 int* Item::useItem(INTERACT_TYPE action) {
     try {

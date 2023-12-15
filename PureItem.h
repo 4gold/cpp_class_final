@@ -31,6 +31,8 @@ class PureItem : public Item {
         int updatephase();
     public:
         PureItem() : Item() {};
+        PureItem(const PureItem &item) : Item(item), lock(item.lock), takable(item.takable), page(item.page){};
+        PureItem(const PureItem* item) : PureItem(*item) {};
         PureItem(const string name, const bool disable, const Dialog* dialog, const int effect[4][3],
                  const bool lock, const bool takable, const int page) 
         : Item(name, disable, dialog, effect), lock(lock), takable(takable), page(page) {};
@@ -44,9 +46,14 @@ class PureItem : public Item {
         : Item(name, disable), lock(lock), takable(takable), page(page) {
             this->dialog->loadPureItemDialog(this->name, this->lock, this->page);
         };
-        ~PureItem() {};
+        ~PureItem() {}; 
+        bool getTakable() const;
 
 };
+
+bool PureItem::getTakable() const {
+    return this->takable;
+}
 
 bool PureItem::attackedAct() {
     defaultAct(INTERACT_TYPE::ATTACK, INTERACT_TYPE_H::TYPE_PUREITEM, static_cast<int>(lock));

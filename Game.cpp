@@ -86,6 +86,16 @@ void Game::interact(Item &i)
         presentMap.updateConnection(mapCase);
         pPtr->updateMap(presentMap);
     }
+    // 如果為可取得的物品，交互完畢直接放進背包
+    if (i.getTakable()) {
+        // 複製物品進入背包
+        vector<PureItem> pBag = pPtr->bag;
+        pBag.push_back(*(new PureItem(((PureItem*)&i)))); 
+        pPtr->updateBag(pBag);
+
+        // 地圖上的道具設為不可見
+        i.updateDisable();
+    }
 }
 
 void Game::observe(Item &i)
