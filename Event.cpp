@@ -65,6 +65,19 @@ bool Event::isprogressing()
     return progress;
 }
 
+vector<Event*> EventManager::events;
+
+void EventManager::addEvent(Event* event) {
+    events.push_back(event);
+}
+
+Event* EventManager::getEvent(int index) {
+    if (index >= 0 && index < events.size()) {
+        return events[index];
+    }
+    return nullptr; // 或其他適當的錯誤處理
+}
+
 
 
 
