@@ -88,7 +88,7 @@ int* Item::useItem(INTERACT_TYPE action) {
 
     int* result = new int[4];
     std::copy(effect[static_cast<int>(action)], effect[static_cast<int>(action)] + 3, result);
-    result[4] = mapValue;
+    result[3] = mapValue;
     return result;
 }
 
