@@ -236,7 +236,7 @@ int main()
                 
                 if (convertedNumber == 2)
                 {   
-                    cout << "test grape ";
+                    
                     g.switchMap(convertedNumber);
 
                     // 更新現有房間內的物品
@@ -280,7 +280,7 @@ int main()
                     // 輸出當前房間中的物品名稱
                     showValidItemsInRoom(itemsInCurrentRoom, Itemcnt);
 
-                    if (!(hierarch->isactive()))
+                    if ((hierarch->isactive()))
                     {
                         hierarch->start(1);
                         hierarch->readLines();
