@@ -60,9 +60,13 @@ void Event::end(int i, Player& p, int s)
     this->progressing = s;
 }
 
+bool Event::isactive()
+{
+    return this->active;
+}
 bool Event::isprogressing()
 {
-    return progress;
+    return this->progress;
 }
 
 vector<Event*> EventManager::events;
