@@ -1,8 +1,6 @@
 
 #include "Item.h"
 
-const std::vector<std::string> split(const std::string& str, const std::string& pattern);
-
 Dialog* Item::defaultAliveDialog;
 Dialog* Item::defaultDeadDialog;
 Dialog* Item::defaultOpenDialog;
@@ -127,7 +125,7 @@ void Item::defaultAct(INTERACT_TYPE act, string type, int determinant) {
         FuncPool::delayCout(defaultAliveOrOpenDialog->getDialog(act));
     else { // 有台詞 
         string pattern = "---@--@---";
-        vector<string> actDialogs = split(actDialog, pattern);
+        vector<string> actDialogs = FuncPool::split(actDialog, pattern);
         if (actDialogs.size() > 1) {
             for (string log : actDialogs) {
                 FuncPool::delayCout(log);
@@ -153,24 +151,5 @@ void Item::initializeDefault() {
     Item::defaultLockDialog->loadPureItemDialog(defaultString, 0, 0);
 }
 
-const std::vector<std::string> split(const std::string& str, const std::string& pattern) {
-    std::vector<std::string> result;
-    std::string::size_type begin, end;
 
-    end = str.find(pattern);
-    begin = 0;
-
-    while (end != std::string::npos) {
-        if (end - begin != 0) {
-            result.push_back(str.substr(begin, end-begin)); 
-        }    
-        begin = end + pattern.size();
-        end = str.find(pattern, begin);
-    }
-
-    if (begin != str.length()) {
-        result.push_back(str.substr(begin));
-    }
-    return result;        
-}
 

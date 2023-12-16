@@ -143,8 +143,16 @@ int main()
         int convertedNumber;
         // 玩家需輸入: 可執行的指令 + " " + 所在房間的Item名稱
         // 切換地圖時: switchMap + " " + 1~9的整數
+        string cmdStr;
+        getline(cin, cmdStr);
+        vector<string> cmds = FuncPool::split(cmdStr, " ");
+        if (cmds.size() > 2) {
+            cout << "請輸入有效指令";
+            continue;
+        } 
+        cmd = cmds[0];
+        obj = cmds.back();
 
-        cin >> cmd >> obj;
         Item* objItem;
 
         // 確認obj是否為存在此房間且可視的item 或 存在的房間
