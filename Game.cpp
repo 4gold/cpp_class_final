@@ -134,7 +134,7 @@ void Game::switchMap(int newRoom)
         pPtr->setRoom(newRoom);
         cout << "移動至 : " << static_cast<Map::Room>(newRoom) << endl;
     }
-    cout << "無效的移動";
+    cout << "無效的移動" << endl;
 }
 
 void Game::help()
@@ -153,5 +153,5 @@ void Game::help()
             " + 1~9的整數"
          << endl
          << "1~9代表著不同的的房間, 只能移動到相通的房間" << endl
-         << "目前所有已去過的房間 :";
+         << "目前所有已去過的房間 :" << endl;
 }
