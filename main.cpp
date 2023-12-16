@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "Item.h"
-#include "Dialog.h"
 #include "InteractType.h"
 #include "HumanItem.h"
 #include "PureItem.h"
@@ -16,11 +15,11 @@
 
 using namespace std;
 
-bool isValidObj(string obj, int Itemcnt, vector<Item> itemsInCurrentRoom)
+bool isValidObj(string obj, int Itemcnt, vector<Item*> itemsInCurrentRoom)
 {
     for (int i = 0; i < Itemcnt; i++)
     {
-        if (itemsInCurrentRoom[i].getName() == obj and itemsInCurrentRoom[i].getDisable())
+        if (itemsInCurrentRoom[i]->getName() == obj && itemsInCurrentRoom[i]->getDisable())
         {
             return true;
         }
@@ -70,6 +69,9 @@ void evenInitializer();
  *  */
 int main()
 {   
+    cout << "hello";
+    
+    
     // 初始化
     int eventProgress;
     int ending = 0; // 0 : 還沒決定結局 1: 侵蝕度低 4: 侵蝕度高
@@ -79,11 +81,15 @@ int main()
     Game g = Game();
     Map m = Map();
     Story story = Story();
-
+    
     map<string, Item*> allItems;
     initializeAllItems(allItems, pPtr);
+    
     putItemsInRoom(allItems, m);
 
+    p.setRoom(Map::Room::ritualRoom);
+   
+    
     evenInitializer();
     Event *startEvent = EventManager::getEvent(0);
     Event *kitchen = EventManager::getEvent(1);
@@ -93,7 +99,7 @@ int main()
     Event *ending2 = EventManager::getEvent(5);
     Event *ending3 = EventManager::getEvent(6);
     Event *ending4 = EventManager::getEvent(7);
-
+    
     startEvent->start(0);
     g.setPlayer(pPtr);
 
@@ -117,7 +123,7 @@ int main()
         }
         // 取得當前房間中的物品列表
 
-        vector<Item> itemsInCurrentRoom = m.roomItems[static_cast<Map::Room>(currentPlayerRoom)];
+        vector<Item*> itemsInCurrentRoom = m.roomItems[static_cast<Map::Room>(currentPlayerRoom)];
         vector<PureItem> bag = p.bag;
         int Itemcnt = itemsInCurrentRoom.size();
         int numInBag = bag.size();
@@ -154,9 +160,9 @@ int main()
         // 將obj 轉換成 Item 物件
         for (int i = 0; i < Itemcnt; i++)
         {
-            if (itemsInCurrentRoom[i].getName() == obj and itemsInCurrentRoom[i].getDisable())
+            if (itemsInCurrentRoom[i]->getName() == obj and itemsInCurrentRoom[i]->getDisable())
             {
-                objItem = itemsInCurrentRoom[i];
+                objItem = *itemsInCurrentRoom[i];
             }
         }
 
@@ -200,7 +206,7 @@ int main()
                     cout << "所在的房間有 : ";
                     for (int i = 0; i < Itemcnt; i++)
                     {
-                        cout << itemsInCurrentRoom[i].getName() << ", ";
+                        cout << itemsInCurrentRoom[i]->getName() << ", ";
                     }
                     cout << endl;
 
@@ -242,7 +248,7 @@ int main()
                     cout << "所在的房間有 : ";
                     for (int i = 0; i < Itemcnt; i++)
                     {
-                        cout << itemsInCurrentRoom[i].getName() << ", ";
+                        cout << itemsInCurrentRoom[i]->getName() << ", ";
                     }
                     cout << endl;
 
@@ -286,7 +292,7 @@ int main()
                     cout << "所在的房間有 : ";
                     for (int i = 0; i < Itemcnt; i++)
                     {
-                        cout << itemsInCurrentRoom[i].getName() << ", ";
+                        cout << itemsInCurrentRoom[i]->getName() << ", ";
                     }
                     cout << endl;
                     finalEvent->start(3);
@@ -380,7 +386,7 @@ int main()
                 cout << "這個房間有 : ";
                 for (int i = 0; i < Itemcnt; i++)
                 {
-                    cout << itemsInCurrentRoom[i].getName() << ", ";
+                    cout << itemsInCurrentRoom[i]->getName() << ", ";
                 }
                 cout << endl;
                 continue;
@@ -433,6 +439,7 @@ int main()
     {
         cout << "遊戲結束";
     }
+    
 
     return 0;
 }
@@ -519,7 +526,7 @@ void initializeAllItems(map<string, Item*> &items, Player* player) {
     items.insert(pair<string, Item*>("weird_grape_guy", weird_grape_guy));
 
     items.insert(pair<string, Item*>("cabinet", cabinet));
-    items.insert(pair<string, Item*>("long", long_candlestick));
+    items.insert(pair<string, Item*>("long_candlestick", long_candlestick));
     items.insert(pair<string, Item*>("grape", grape));
 
     items.insert(pair<string, Item*>("painting_on_wall", painting_on_wall));
@@ -541,32 +548,39 @@ void initializeAllItems(map<string, Item*> &items, Player* player) {
     items.insert(pair<string, Item*>("god_pearl", god_pearl));
 }
 
-void putItemsInRoom(map<string, Item*> &items, Map& map) {
-    map.addItemToRoom(map.ritualRoom, *(items.find("long_candlestick")->second));
-    map.addItemToRoom(map.ritualRoom, *(items.find("cabinet")->second));
-    map.addItemToRoom(map.ritualRoom, *(items.find("usurper")->second));
+void putItemsInRoom(map<string, Item*> &items, Map& gameMap) {
 
-    map.addItemToRoom(map.storageRoom, *(items.find("grape")->second));
+    gameMap.addItemToRoom(gameMap.ritualRoom, (items["cabinet"]));
+    gameMap.addItemToRoom(gameMap.ritualRoom, (items["long_candlestick"]));
+    gameMap.addItemToRoom(gameMap.ritualRoom, (items["usurper"]));
+    gameMap.addItemToRoom(gameMap.ritualRoom, (items["god_pearl"]));
+    
+    
+    gameMap.addItemToRoom(gameMap.storageRoom, (items["grape"]));
 
-    map.addItemToRoom(map.restaurant, *(items.find("cook")->second));
-    map.addItemToRoom(map.restaurant, *(items.find("weird_grape_guy")->second));
+    gameMap.addItemToRoom(gameMap.restaurant, (items["cook"]));
+    gameMap.addItemToRoom(gameMap.restaurant, (items["weird_grape_guy"]));
 
-    map.addItemToRoom(map.leaderRoom, *(items.find("door_leader_to_west_hallway")->second));
-    map.addItemToRoom(map.leaderRoom, *(items.find("painting_on_wall")->second));
-    map.addItemToRoom(map.leaderRoom, *(items.find("sculpture")->second));
+    gameMap.addItemToRoom(gameMap.leaderRoom, (items["door_leader_to_west_hallway"]));
+    gameMap.addItemToRoom(gameMap.leaderRoom, (items["painting_on_wall"]));
+    gameMap.addItemToRoom(gameMap.leaderRoom, (items["sculpture"]));
 
-    map.addItemToRoom(map.laboratory, *(items.find("diary_lab")->second));
-    map.addItemToRoom(map.laboratory, *(items.find("trash_can")->second));
-    map.addItemToRoom(map.laboratory, *(items.find("piece_of_mirror_2")->second));
+    gameMap.addItemToRoom(gameMap.laboratory, (items["diary_lab"]));
+    gameMap.addItemToRoom(gameMap.laboratory, (items["trash_can"]));
+    gameMap.addItemToRoom(gameMap.laboratory, (items["piece_of_mirror_2"]));
 
-    map.addItemToRoom(map.kitchen, *(items.find("sink")->second));
-    map.addItemToRoom(map.kitchen, *(items.find("piece_of_mirror_3")->second));
+    gameMap.addItemToRoom(gameMap.kitchen, (items["sink"]));
+    gameMap.addItemToRoom(gameMap.kitchen, (items["piece_of_mirror_3"]));
 
-    map.addItemToRoom(map.protagonistRoom, *(items.find("plush_toy")->second));
-    map.addItemToRoom(map.protagonistRoom, *(items.find("piece_of_mirror_1")->second));
-    map.addItemToRoom(map.protagonistRoom, *(items.find("diary_player")->second));
-    map.addItemToRoom(map.protagonistRoom, *(items.find("drawer")->second));
+    gameMap.addItemToRoom(gameMap.protagonistRoom, (items["plush_toy"]));
+    gameMap.addItemToRoom(gameMap.protagonistRoom, (items["piece_of_mirror_1"]));
+    gameMap.addItemToRoom(gameMap.protagonistRoom, (items["diary_player"]));
+    gameMap.addItemToRoom(gameMap.protagonistRoom, (items["drawer"]));
+
+    cout << gameMap.roomItems[gameMap.ritualRoom].back()->getName();
+    
 }
+
 void evenInitializer()
 {  
 

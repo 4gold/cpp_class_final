@@ -45,17 +45,12 @@ private:
     static vector<Event*> events;
 
 public:
-    static void addEvent(Event* event) {
-        events.push_back(event);
-    }
+    static void addEvent(Event* event);
 
-    static Event* getEvent(int index) {
-        if (index >= 0 && index < events.size()) {
-            return events[index];
-        }
-        return nullptr; // 或其他適當的錯誤處理
-    }
+    static Event* getEvent(int index);
 };
+
+
 
 
 #endif

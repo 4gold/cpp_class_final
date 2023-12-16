@@ -2,6 +2,7 @@
 #include<string>
 #include<cstdlib>
 #include<time.h>
+#include <fstream>
 
 #include <chrono>
 #include <thread>
