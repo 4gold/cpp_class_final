@@ -25,7 +25,7 @@ class FuncPool {
         template<typename T>
         static void delayCout(T t, bool changeLine){
             cout << t << (changeLine ? "\n" : "");
-            std::this_thread::sleep_for(std::chrono::milliseconds(TEXT_INTERVAL_MILSEC));
+            //std::this_thread::sleep_for(std::chrono::milliseconds(TEXT_INTERVAL_MILSEC));
         };
 
         template<typename T>
