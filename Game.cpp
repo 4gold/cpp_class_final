@@ -90,7 +90,7 @@ void Game::interact(Item* i)
     if (i->getTakable()) {
         // 複製物品進入背包
         vector<PureItem*> pBag(pPtr->bag);
-        PureItem* pi = new PureItem((PureItem*)&i);
+        PureItem* pi = new PureItem(dynamic_cast<PureItem*>(i));
         pBag.push_back(pi); 
         pPtr->updateBag(pBag);
 
