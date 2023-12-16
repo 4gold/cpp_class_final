@@ -60,11 +60,11 @@ bool Map::isValidMove(Room currentRoom, Room nextRoom) {
                 break;
             case 1:
                 FuncPool::readAndPrintFile("儲物間.txt");
-                cout<<"看起來像是個儲物間，房間裏有許多箱子。\n只有擺在比較前面的箱子有移動的痕跡，後面的物品看上去許久沒人動了，上面堆了厚厚一層灰。";
+                cout<<"看起來像是個儲物間，房間裏有許多箱子。\n只有擺在比較前面的箱子有移動的痕跡，後面的物品看上去許久沒人動了，上面堆了厚厚一層灰。" << endl;
                 break;
             case 2:
                 FuncPool::readAndPrintFile("餐廳ASCII.txt"); 
-                cout<<"一個寬廣的空間，房頂挑高超過四米。有一群人坐在中間的大餐桌吃飯。\n房內沒有現代燈具，蠟燭昏暗的火光在空氣中晃動，讓人感到有些惶恐。";
+                cout<<"一個寬廣的空間，房頂挑高超過四米。有一群人坐在中間的大餐桌吃飯。\n房內沒有現代燈具，蠟燭昏暗的火光在空氣中晃動，讓人感到有些惶恐。" << endl;
                 break;
             case 3:
                 FuncPool::readAndPrintFile("廚房ASCII.txt");

@@ -246,6 +246,9 @@ int main()
                     if ((kitchen->isactive()))
                     {
                         kitchen->start(1);
+                        // 觸發事件後儲藏室物品才可見。
+                        for (Item* itemInStorage : m.roomItems[static_cast<Map::Room>(m.storageRoom)])
+                            itemInStorage->updateDisable();
                     }
                     continue;
                 }
@@ -516,7 +519,6 @@ void initializeAllItems(map<string, Item*> &items, Player* player) {
     usurper->addRelatedItem(god_pearl, RELATED_STATE::DISABLE);
 
     // 2. 廚房葡萄事件
-    weird_grape_guy->addRelatedItem(grape, RELATED_STATE::DISABLE);
     grape->addRelatedItem(weird_grape_guy, RELATED_STATE::PHASE);
 
     // 3. 儀式房長燭台
