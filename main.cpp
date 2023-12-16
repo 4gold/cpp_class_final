@@ -19,7 +19,7 @@ bool isValidObj(string obj, int Itemcnt, vector<Item*> itemsInCurrentRoom)
 {
     for (int i = 0; i < Itemcnt; i++)
     {
-        if (itemsInCurrentRoom[i]->getName() == obj && itemsInCurrentRoom[i]->getDisable())
+        if (itemsInCurrentRoom[i]->getName() == obj && !itemsInCurrentRoom[i]->getDisable())
         {
             return true;
         }
@@ -109,7 +109,7 @@ int main()
 
     // 可能一些教學之類的
 
-    cout << "help me" << "來了解遊玩方式";
+    cout << "help me" << "來了解遊玩方式" << endl;
 
     while (true)
     {
@@ -140,7 +140,7 @@ int main()
         {
             if (!isValidRoom(obj))
             {
-                cout << "無效的房間";
+                cout << "無效的房間" << endl;
                 continue;
             }
             else
@@ -152,7 +152,7 @@ int main()
         {
             if (!isValidObj(obj, Itemcnt, itemsInCurrentRoom))
             {
-                cout << "不存在的對象";
+                cout << "不存在的對象" << endl;
                 continue;
             }
         }
@@ -178,15 +178,15 @@ int main()
                 {
                     if (bag[i].getName() == "long_candlestick")
                     {
-                        cout << "前進儲藏室的台詞";
+                        cout << "前進儲藏室的台詞" << endl;
                         startEvent->turnoff();
                         startEvent->end(1, p, -1);
                         g.switchMap(1);
                         continue;
                     }
                 }
-                cout << "扣血台詞";
-                cout << "前進儲藏室的台詞";
+                cout << "扣血台詞" << endl;
+                cout << "前進儲藏室的台詞 " << endl;
                 startEvent->turnoff();
                 startEvent->end(1, p, -1);
                 g.switchMap(1);
@@ -225,7 +225,7 @@ int main()
                 {
                     if (bag[i].getName() == "grape")
                     {
-                        cout << "『謝謝你！你不是葡萄小偷！』";
+                        cout << "『謝謝你！你不是葡萄小偷！』" << endl;
                         kitchen->turnoff();
                         kitchen->end(2, p, -2);
                         continue;
@@ -264,7 +264,7 @@ int main()
                 // 只會在第一次離開教主房間時啟動, 順便結束這個event
                 else if (flag2)
                 {
-                    cout << "要離開房間時，神像會倒下撞破掛畫，發現後面的實驗室。同時也會發現神像裡面有屍體";
+                    cout << "要離開房間時，神像會倒下撞破掛畫，發現後面的實驗室。同時也會發現神像裡面有屍體" << endl;
                     flag2 = false;
                     hierarch->turnoff();
                     hierarch->end(3, p, -10);
@@ -308,7 +308,7 @@ int main()
 
             if (ans == 1) // 答對，準備被攻擊
             {   
-                cout << "台詞";
+                cout << "台詞" << endl;
                 p.updateHealthPoint(currentHp-10);
                 // 看還有沒有要做甚麼
 
@@ -328,7 +328,7 @@ int main()
                         g.attack(objItem); 
                         if (ending = 1) // 侵蝕度高->結局1
                         {   
-                            cout << "台詞";
+                            cout << "台詞" << endl;
                             finalEvent->end(1, p, 4);
                             finalEvent->turnoff();
                             ending1->start(4);
@@ -336,7 +336,7 @@ int main()
                         }
                         else if (ending = 4) // 侵蝕度低->結局4
                         {
-                            cout << "台詞";
+                            cout << "台詞" << endl;
                             finalEvent->end(1, p, 7);
                             finalEvent->turnoff();
                             ending4->start(7);
@@ -345,7 +345,7 @@ int main()
                     }
                     else // 鏡子沒蒐集齊->結局2
                     {   
-                        cout << "台詞";
+                        cout << "台詞" << endl;
                         finalEvent->end(1, p, 5);
                         finalEvent->turnoff();
                         ending4->start(7);
@@ -356,7 +356,7 @@ int main()
             }
             else if (ans == 2) // 答錯，進入結局2
             {   
-                cout << "台詞";
+                cout << "台詞" << endl;
                 finalEvent->end(1, p, 5);
                 finalEvent->turnoff();
                 ending4->start(7);
@@ -365,7 +365,7 @@ int main()
             }
             else // 答錯，進入結局2
             {
-                cout << "亂答台詞";
+                cout << "亂答台詞" << endl;
                 finalEvent->end(1, p, 5);
                 finalEvent->turnoff();
                 ending4->start(7);
@@ -386,14 +386,17 @@ int main()
                 cout << "這個房間有 : ";
                 for (int i = 0; i < Itemcnt; i++)
                 {
+                    if(!itemsInCurrentRoom[i]->getDisable())
+                    {
                     cout << itemsInCurrentRoom[i]->getName() << ", ";
+                    }
                 }
                 cout << endl;
                 continue;
             }
             else
             {
-                cout << "不存在的房間";
+                cout << "不存在的房間" << endl;
                 continue;
             }
         }
@@ -425,7 +428,7 @@ int main()
         else
         {
             // 輸入不存在指令
-            cout << "請輸入有效指令";
+            cout << "請輸入有效指令" << endl;
             continue;
         }
     }
