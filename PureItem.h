@@ -31,24 +31,27 @@ class PureItem : public Item {
         int updatephase();
     public:
         PureItem() : Item() {};
-        PureItem(const string name, const bool disable, const Dialog* dialog, const int effect[4][3],
+        PureItem(const string chineseName, const string name) : PureItem(chineseName, name, false, false, false, 0) {};// 非關鍵道具default
+        PureItem(const string chineseName, const string name, const int effect[4][3]) : PureItem(chineseName, name, false, effect, false, false, 0) {};// 非關鍵道具，會影響血量。
+        
+        PureItem(const string chineseName, const string name, const bool disable, const Dialog* dialog, const int effect[4][3],
                  const bool lock, const bool takable, const int page) 
-        : Item(name, disable, dialog, effect), lock(lock), takable(takable), page(page) {};
-        PureItem(const string name, const bool disable, const int effect[4][3],
+        : Item(chineseName,name, disable, dialog, effect), lock(lock), takable(takable), page(page) {};
+        PureItem(const string chineseName, const string name, const bool disable, const int effect[4][3],
                  const bool lock, const bool takable, const int page) 
-        : Item(name, disable, effect), lock(lock), takable(takable), page(page) {
+        : Item(chineseName,name, disable, effect), lock(lock), takable(takable), page(page) {
             this->dialog->loadPureItemDialog(this->name, this->lock, this->page);
         };
-        PureItem(const string name, const bool disable,
+        PureItem(const string chineseName, const string name, const bool disable,
                  const bool lock, const bool takable, const int page) 
-        : Item(name, disable), lock(lock), takable(takable), page(page) {
+        : Item(chineseName, name, disable), lock(lock), takable(takable), page(page) {
             this->dialog->loadPureItemDialog(this->name, this->lock, this->page);
         };
         PureItem(const PureItem &item) 
-        : PureItem( item.name, item.disable, item.effect,
+        : PureItem( item.chineseName, item.name, item.disable, item.effect,
                  item.lock, item.takable, item.page) {};
         PureItem(const PureItem* item) 
-        : PureItem( item->name, item->disable, item->effect,
+        : PureItem( item->chineseName, item->name, item->disable, item->effect,
                  item->lock, item->takable, item->page) {};
         
         ~PureItem() {}; 

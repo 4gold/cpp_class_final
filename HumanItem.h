@@ -44,23 +44,23 @@ class HumanItem : public Item {
         HumanItem() : Item(), health(5), phase(INIT_PHASE){
             this->type = INTERACT_TYPE_H::TYPE_NPC;
         };
-        HumanItem(const string name, const bool disable, const Dialog* dialog, const int effect[4][3],
+        HumanItem(const string chineseName, const string name, const bool disable, const Dialog* dialog, const int effect[4][3],
                   const int health, Player* player) 
-        : Item(name, disable, dialog, effect), health(health), phase(INIT_PHASE) {
+        : Item(chineseName, name, disable, dialog, effect), health(health), phase(INIT_PHASE) {
             this->type = INTERACT_TYPE_H::TYPE_NPC;
             this->dialog->loadNpcDialog(name, phase);
             this->player = player;
         };
-        HumanItem(const string name, const bool disable, const int effect[4][3],
+        HumanItem(const string chineseName, const string name, const bool disable, const int effect[4][3],
                   const int health, Player* player) 
-        : Item(name, disable, effect), health(health), phase(INIT_PHASE) {
+        : Item(chineseName, name, disable, effect), health(health), phase(INIT_PHASE) {
             this->type = INTERACT_TYPE_H::TYPE_NPC;
             this->dialog->loadNpcDialog(name, phase);
             this->player = player;
         };
-        HumanItem(const string name, const bool disable, 
+        HumanItem(const string chineseName, const string name, const bool disable, 
                   const int health, Player* player) 
-        : Item(name, disable), health(health), phase(INIT_PHASE) {
+        : Item(chineseName, name, disable), health(health), phase(INIT_PHASE) {
             this->type = INTERACT_TYPE_H::TYPE_NPC;
             this->dialog->loadNpcDialog(name, phase);
             this->player = player;

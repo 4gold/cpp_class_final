@@ -12,6 +12,7 @@ Item::Item() {
 
 Item::Item(const Item& item) {
     this->dialog = new Dialog(*(item.dialog));
+    this->chineseName = item.chineseName;
     this->name = item.name;
     this->type = item.type;
     this->disable = item.disable;
@@ -19,20 +20,23 @@ Item::Item(const Item& item) {
     std::copy(&(item.effect[0][0]), &(item.effect[0][0]) + 4 * 3, &(this->effect[0][0])); // deep copy dialog
 }
 
-Item::Item(const string name, const bool disable, const Dialog* dialog, const int effect[4][3]) {
+Item::Item(const string chineseName, const string name, const bool disable, const Dialog* dialog, const int effect[4][3]) {
+    this->chineseName = chineseName;
     this->name = name;
     this->disable = disable;
     this->dialog = new Dialog(dialog);
     std::copy(&effect[0][0], &effect[0][0] + 4 * 3, &(this->effect[0][0])); // deep copy dialog
 }
 
-Item::Item(const string name, const bool disable, const int effect[4][3]) {
+Item::Item(const string chineseName, const string name, const bool disable, const int effect[4][3]) {
+    this->chineseName = chineseName;
     this->name = name;
     this->disable = disable;
     this->dialog = new Dialog();
 }
 
-Item::Item(const string name, const bool disable) {
+Item::Item(const string chineseName, const string name, const bool disable) {
+    this->chineseName = chineseName;
     this->name = name;
     this->disable = disable;
     this->dialog = new Dialog();
@@ -51,6 +55,10 @@ Item::~Item() {
         }
         this->relatedItem.clear();
     }
+}
+
+string Item::getChineseName() const {
+    return this->chineseName;
 }
 
 

@@ -28,6 +28,7 @@ class Item {
         string type; // npc or item
         bool disable; // 預設 false，使用過的物品設為true, true的物品不顯示在地圖背包中。
         Dialog* dialog;
+        string chineseName;
 
         /*
           與此物件互動對player造成的影響
@@ -59,10 +60,11 @@ class Item {
         vector<pair<Item*, RELATED_STATE>*> relatedItem; 
         Item();
         Item(const Item& item);
-        Item(const string name, const bool disable, const Dialog* dialog, const int effect[4][3]);
-        Item(const string name, const bool disable, const int effect[4][3]);
-        Item(const string name, const bool disable);
+        Item(const string chineseName, const string name, const bool disable, const Dialog* dialog, const int effect[4][3]);
+        Item(const string chineseName, const string name, const bool disable, const int effect[4][3]);
+        Item(const string chineseName, const string name, const bool disable);
         virtual ~Item();
+        string getChineseName() const;
         string getName() const;
         string getType() const;
         bool getDisable() const;

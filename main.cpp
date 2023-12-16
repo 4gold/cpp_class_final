@@ -63,8 +63,9 @@ void showValidItemsInRoom(vector<Item*> itemsInCurrentRoom, int Itemcnt) {
 }
 
 
-void initializeAllItems(map<string, Item*> &items, Player* player);
-void putItemsInRoom(map<string, Item*> &items, Map& map);
+void initializeAllKeyItems(map<string, Item*> &items, Player* player); // 初始化關鍵道具
+void initializeAllNoneKeyItems(map<string, Item*> &items, Map &map); // 初始化非關鍵道具，設定在not_key_items.txt
+void putKeyItemsInRoom(map<string, Item*> &items, Map& map); // 將關鍵道具塞入地圖
 void evenInitializer();
 
 /** 待補:
@@ -93,9 +94,10 @@ int main()
     Story story = Story();
     
     map<string, Item*> allItems;
-    initializeAllItems(allItems, pPtr);
-    
-    putItemsInRoom(allItems, m);
+    initializeAllKeyItems(allItems, pPtr);
+    initializeAllNoneKeyItems(allItems, m);
+    putKeyItemsInRoom(allItems, m);
+
 
     p.setRoom(Map::Room::ritualRoom);
    
@@ -478,41 +480,40 @@ int main()
 }
 
 
-void initializeAllItems(map<string, Item*> &items, Player* player) {
+void initializeAllKeyItems(map<string, Item*> &items, Player* player) {
 
     // 初始化static的預設對話
     HumanItem::initializeDefault();
     // ------------- key items ----------------------
     int effect[4][3] = {{0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}};
-    HumanItem* cook = new HumanItem("cook", false, effect, 100, player);
-    HumanItem* usurper = new HumanItem("usurper", true, effect, 100, player);
-    HumanItem* weird_grape_guy = new HumanItem("weird_grape_guy", false, effect, 100, player);
+    HumanItem* cook = new HumanItem("廚師", "cook", false, effect, 100, player);
+    HumanItem* usurper = new HumanItem("漢森", "usurper", true, effect, 100, player);
+    HumanItem* weird_grape_guy = new HumanItem("怪人", "weird_grape_guy", false, effect, 100, player);
 
     int effect2[4][3] = {{0,0,0}, {-10,0,0}, {0,0,0}, {0,0,0}};
-    PureItem* cabinet = new PureItem("cabinet", false, effect2, true, false, 0);
-    PureItem* long_candlestick = new PureItem("long_candlestick", false, false, true, 0);
-    PureItem* grape = new PureItem("grape", true, false, true, 0);
+    PureItem* cabinet = new PureItem("木櫃子", "cabinet", false, effect2, true, false, 0);
+    PureItem* long_candlestick = new PureItem("長燭台", "long_candlestick", false, false, true, 0);
+    PureItem* grape = new PureItem("葡萄", "grape", true, false, true, 0);
 
     int effect3[4][3] = {{0,0,0}, {0,-10,10}, {0,0,0}, {0,-1,1}};
-    PureItem* painting_on_wall = new PureItem("painting_on_wall", false, effect3, true, false, 0);
-    PureItem* door_leader_to_west_hallway = new PureItem("door_leader_to_west_hallway", false, false, false, 0);
-    PureItem* sculpture = new PureItem("sculpture", false, true, false, 0);
+    PureItem* painting_on_wall = new PureItem("牆上的掛畫", "painting_on_wall", false, effect3, true, false, 0);
+    PureItem* sculpture = new PureItem("雕像", "sculpture", false, true, false, 0);
 
-    PureItem* diary_lab = new PureItem("diary_lab", false, false, false, 6);
-    PureItem* trash_can = new PureItem("trash_can", true, false, false, 0);
+    PureItem* diary_lab = new PureItem("實驗紀錄", "diary_lab", false, false, false, 6);
+    PureItem* trash_can = new PureItem("垃圾桶", "trash_can", true, false, false, 0);
     
-    PureItem* key_to_outside = new PureItem("key_to_outside", false, false, true, 0);
-    PureItem* sink = new PureItem("sink", false, true, false, 0);
+    PureItem* key_to_outside = new PureItem("大把的鑰匙", "key_to_outside", false, false, true, 0);
+    PureItem* sink = new PureItem("水槽", "sink", false, true, false, 0);
 
-    PureItem* drawer = new PureItem("drawer", true, false, false, 0);
-    PureItem* diary_player = new PureItem("diary_player", false, true, false, 6);
-    PureItem* plush_toy = new PureItem("plush_toy", false, false, true, 0);
+    PureItem* drawer = new PureItem("抽屜", "drawer", true, false, false, 0);
+    PureItem* diary_player = new PureItem("日記", "diary_player", false, true, false, 6);
+    PureItem* plush_toy = new PureItem("羊寶寶玩偶", "plush_toy", false, false, true, 0);
 
-    PureItem* piece_of_mirror_1 = new PureItem("piece_of_mirror_1", true, false, true, 0); // player's room
-    PureItem* piece_of_mirror_2 = new PureItem("piece_of_mirror_2", true, false, true, 0); // lab
-    PureItem* piece_of_mirror_3 = new PureItem("piece_of_mirror_3", true, false, true, 0); // kitchen
+    PureItem* piece_of_mirror_1 = new PureItem("鏡子碎片1", "piece_of_mirror_1", true, false, true, 0); // player's room
+    PureItem* piece_of_mirror_2 = new PureItem("鏡子碎片2", "piece_of_mirror_2", true, false, true, 0); // lab
+    PureItem* piece_of_mirror_3 = new PureItem("鏡子碎片3", "piece_of_mirror_3", true, false, true, 0); // kitchen
 
-    PureItem* god_pearl = new PureItem("god_pearl", true, false, true, 0);
+    PureItem* god_pearl = new PureItem("降神珠", "god_pearl", true, false, true, 0);
 
     // -----------設定物品間交互--------------
     // 1. 篡位者交流後將降神珠設為可見
@@ -525,8 +526,8 @@ void initializeAllItems(map<string, Item*> &items, Player* player) {
     long_candlestick->addRelatedItem(cabinet, RELATED_STATE::LOCK);
     
     // 4. 離開房間雕像倒下事件
-    door_leader_to_west_hallway->addRelatedItem(sculpture, RELATED_STATE::LOCK);
-    door_leader_to_west_hallway->addRelatedItem(painting_on_wall, RELATED_STATE::LOCK);
+    //door_leader_to_west_hallway->addRelatedItem(sculpture, RELATED_STATE::LOCK);
+    //door_leader_to_west_hallway->addRelatedItem(painting_on_wall, RELATED_STATE::LOCK);
 
     // 5. 實驗室日記交流後出現垃圾桶，垃圾桶交流後出現鏡子碎片2
     diary_lab->addRelatedItem(trash_can, RELATED_STATE::DISABLE);
@@ -545,13 +546,6 @@ void initializeAllItems(map<string, Item*> &items, Player* player) {
     // 9. 羊寶寶玩偶交流後廚師狀態變更
     plush_toy->addRelatedItem(cook, RELATED_STATE::LOCK);
 
-    // not important items
-    PureItem* deadbody_ritaul_room = new PureItem();
-    PureItem* basin;
-    PureItem* door_to_outside;
-    PureItem* broken_cabinet;
-    PureItem* table_restaurant;
-
     // -------------------- insert items-------------------------------
     items.insert(pair<string, Item*>("cook", cook));
     items.insert(pair<string, Item*>("usurper", usurper));
@@ -562,7 +556,6 @@ void initializeAllItems(map<string, Item*> &items, Player* player) {
     items.insert(pair<string, Item*>("grape", grape));
 
     items.insert(pair<string, Item*>("painting_on_wall", painting_on_wall));
-    items.insert(pair<string, Item*>("door_leader_to_west_hallway", door_leader_to_west_hallway));
     items.insert(pair<string, Item*>("sculpture", sculpture));
 
     items.insert(pair<string, Item*>("diary_lab", diary_lab));
@@ -580,7 +573,7 @@ void initializeAllItems(map<string, Item*> &items, Player* player) {
     items.insert(pair<string, Item*>("god_pearl", god_pearl));
 }
 
-void putItemsInRoom(map<string, Item*> &items, Map& gameMap) {
+void putKeyItemsInRoom(map<string, Item*> &items, Map& gameMap) {
 
     gameMap.addItemToRoom(gameMap.ritualRoom, (items["cabinet"]));
     gameMap.addItemToRoom(gameMap.ritualRoom, (items["long_candlestick"]));
@@ -593,7 +586,6 @@ void putItemsInRoom(map<string, Item*> &items, Map& gameMap) {
     gameMap.addItemToRoom(gameMap.restaurant, (items["cook"]));
     gameMap.addItemToRoom(gameMap.restaurant, (items["weird_grape_guy"]));
 
-    gameMap.addItemToRoom(gameMap.leaderRoom, (items["door_leader_to_west_hallway"]));
     gameMap.addItemToRoom(gameMap.leaderRoom, (items["painting_on_wall"]));
     gameMap.addItemToRoom(gameMap.leaderRoom, (items["sculpture"]));
 
@@ -608,10 +600,30 @@ void putItemsInRoom(map<string, Item*> &items, Map& gameMap) {
     gameMap.addItemToRoom(gameMap.protagonistRoom, (items["piece_of_mirror_1"]));
     gameMap.addItemToRoom(gameMap.protagonistRoom, (items["diary_player"]));
     gameMap.addItemToRoom(gameMap.protagonistRoom, (items["drawer"]));
-
-    cout << gameMap.roomItems[gameMap.ritualRoom].back()->getName();
     
 }
+
+
+void initializeAllNoneKeyItems(map<string, Item*> &allItems, Map &map) {
+    string fileName = "not_key_items_list.txt";
+    std::ifstream filein(fileName);
+    for (std::string line; std::getline(filein, line);) 
+    {  
+        //format : englishName,chineseName,room
+        vector<string> str = FuncPool::split(line, ",");
+        if (str.size() < 3) continue; // 防空行
+        string name = str[0];
+        string chineseName = str[1];
+        Map::Room room = static_cast<Map::Room>(stoi(str[2]));
+
+        // insert items
+        PureItem* item = new PureItem(chineseName, name);
+        map.addItemToRoom(room, item);
+        allItems.insert(pair<string, Item*>(name, item));
+    }
+    filein.close();
+}
+
 
 void evenInitializer()
 {  
