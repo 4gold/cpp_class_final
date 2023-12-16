@@ -33,6 +33,7 @@ public:
     ~Event();
     void readLines(); 
     bool checkActive();
+    bool isactive();
     void turnoff();
     void start(int e); // e 為加到 progressing的 Event代號
     void end(int i, Player& p, int s) ; // 關閉active, progress, 之後更新地圖連結狀況，i 為開鎖的case, progressing重製為-1, s為之後準備開始的event編號(加負號)
