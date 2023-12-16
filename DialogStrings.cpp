@@ -95,7 +95,27 @@ string* DialogStrings::getDialogNPCString(const string name, const int phase) {
                 break;
             }
             break;   
-          
+        case "usurper"_hash: 
+            switch (phase)
+            {
+            case 0:
+                setDialogStrings(ds, 
+                "",
+                "",
+                "",
+                "");
+                break;
+            case 1:
+                setDialogStrings(ds, 
+                " '我很嫉妒你, 你知道嗎?'  ---@--@--- '神從來看不到我, 我等了十年, 卻被你捷足先登?'",
+                "",
+                "'你不該來的'",
+                "一個面色陰沈的人，死死的盯著你。");
+                break;
+            default:
+                break;
+            }
+            break;  
             
         case "default"_hash:
             switch(phase) 
