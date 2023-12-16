@@ -142,17 +142,24 @@ void Game::help()
 {   
     int hp = pPtr->getHealthPoint();
     cout << "你當前的血量 : " << hp << endl;
-    cout << "以下是可使用指令" << endl;
+    cout << "---------------------------" << endl;
+    cout << "～～以下是可使用指令～～" << endl;
+    cout << "1. 與人/物互動的指令有如下四項：" << endl;
     cout << "attack, talk, interact, observe" << endl;
     cout << "可作用對象為房間內的人/物" << endl;
-    cout << "使用格式： 可執行的指令 + "
-            " + 所在房間的可作用對象"
-         << endl;
-    cout << "例如輸入: observe bed" << endl
-         << "移動的指令為 switchMap" << endl
-         << "使用格式： switchMap + "
-            " + 1~9的整數"
-         << endl
+    cout << "使用格式： 可執行的指令 +\" \" +所在房間的可作用對象id" << endl;
+    cout << "範例：若要與- 水盆(id:basin) - 互動，則輸入以下指令" << endl;
+    cout << "interact basin" << endl;
+    cout << "若要觀察- 床(id:bed)，則輸入以下指令" << endl;
+    cout << "observe bed" << endl << endl;
+
+    cout << "2. 若要觀察房內有什麼物品，請輸入 showRoom" << endl << endl;
+
+    cout << "3. 若要觀看背包內物品，請輸入 showBag" << endl << endl;
+
+    cout << "4. 移動的指令為 switchMap" << endl
+         << "使用格式： switchMap + \" \" + 1~9的整數"  << endl
+         
          << "1~9代表著不同的的房間, 只能移動到相通的房間" << endl
          << "目前所有已去過的房間 :" << endl;
 }

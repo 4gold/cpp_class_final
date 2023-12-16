@@ -57,7 +57,7 @@ void showValidItemsInRoom(vector<Item*> itemsInCurrentRoom, int Itemcnt) {
     for (int i = 0; i < Itemcnt; i++)
     {   
         if (itemsInCurrentRoom[i]->getDisable()) continue; // disable 物件跳過不顯示
-        cout << itemsInCurrentRoom[i]->getName() << ", ";
+        cout << itemsInCurrentRoom[i]->getChineseName() << "(id:" <<  itemsInCurrentRoom[i]->getName() << "), ";
     }
     cout << endl;
 }
