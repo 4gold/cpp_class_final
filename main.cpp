@@ -42,7 +42,7 @@ bool isValidRoom(const string &obj)
     if (isStringInteger(obj))
     {
         int convertedNumber = stoi(obj);
-        if (convertedNumber <= 9 and convertedNumber > 0)
+        if (convertedNumber <= 9 and convertedNumber >= 0)
         {
             return true;
         }
@@ -166,7 +166,7 @@ int main()
             }
             else
             {
-                int convertedNumber = stoi(obj);
+                convertedNumber = stoi(obj);
             }
         }
         else if (cmd == "showRoom") {
@@ -233,13 +233,17 @@ int main()
             // 如果kitchen沒被觸發過就開始事件
             if (cmd == "switchMap")
             {
+                
                 if (convertedNumber == 2)
-                {
+                {   
+                    cout << "test grape ";
                     g.switchMap(convertedNumber);
 
+                    // 更新現有房間內的物品
+                    itemsInCurrentRoom = m.roomItems[static_cast<Map::Room>(currentPlayerRoom)];
                     showValidItemsInRoom(itemsInCurrentRoom, Itemcnt);
 
-                    if (!(kitchen->isprogressing()))
+                    if ((kitchen->isactive()))
                     {
                         kitchen->start(1);
                     }
@@ -276,7 +280,7 @@ int main()
                     // 輸出當前房間中的物品名稱
                     showValidItemsInRoom(itemsInCurrentRoom, Itemcnt);
 
-                    if (!(hierarch->isprogressing()))
+                    if (!(hierarch->isactive()))
                     {
                         hierarch->start(1);
                         hierarch->readLines();
@@ -401,6 +405,9 @@ int main()
             if (convertedNumber <= 9 and convertedNumber > 0)
             {
                 g.switchMap(convertedNumber);
+                
+                // 更新現有房間內的物品
+                itemsInCurrentRoom = m.roomItems[static_cast<Map::Room>(currentPlayerRoom)];
 
                 // // 輸出當前房間中的物品名稱
                 cout << "這個房間有 : ";
