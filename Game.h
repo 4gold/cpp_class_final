@@ -25,10 +25,10 @@ public:
     ~Game();
     void setPlayer(Player *pPtr);
     void switchMap(int room);
-    void attack(Item &i);
-    void talk(Item &i);
-    void interact(Item &i);
-    void observe(Item &i);
+    void attack(Item *i);
+    void talk(Item *i);
+    void interact(Item *i);
+    void observe(Item *i);
     void help();
 };
 

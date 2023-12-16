@@ -13,13 +13,10 @@ bool PureItem::attackedAct() {
 bool PureItem::interactedAct() {
     // print dialog
     defaultAct(INTERACT_TYPE::INTERACT, INTERACT_TYPE_H::TYPE_PUREITEM, static_cast<int>(this->lock));
-
     // 修改相關的物件
-    int len = this->relatedItem.size();
-    for (int i = 0; i < len; i++) {
+    while (!relatedItem.empty()) {
         RELATED_STATE changeTarget = this->relatedItem.back()->second;
         Item* changeItem = this->relatedItem.back()->first;
-
         if (changeTarget == RELATED_STATE::DISABLE) { // 將對象修改為可用／不可用。
             (changeItem)->updateDisable();
         } else if (changeTarget == RELATED_STATE::PHASE) { // phase 改變，台詞要跟著改變。

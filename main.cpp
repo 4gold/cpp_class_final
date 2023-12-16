@@ -51,6 +51,18 @@ bool isValidRoom(const string &obj)
     return false;
 }
 
+void showValidItemsInRoom(vector<Item*> itemsInCurrentRoom, int Itemcnt) {
+    // 輸出當前房間中的物品名稱
+    cout << "所在的房間有 : ";
+    for (int i = 0; i < Itemcnt; i++)
+    {   
+        if (itemsInCurrentRoom[i]->getDisable()) continue; // disable 物件跳過不顯示
+        cout << itemsInCurrentRoom[i]->getName() << ", ";
+    }
+    cout << endl;
+}
+
+
 void initializeAllItems(map<string, Item*> &items, Player* player);
 void putItemsInRoom(map<string, Item*> &items, Map& map);
 void evenInitializer();
@@ -69,8 +81,6 @@ void evenInitializer();
  *  */
 int main()
 {   
-    cout << "hello";
-    
     
     // 初始化
     int eventProgress;
@@ -112,7 +122,8 @@ int main()
     cout << "help me" << "來了解遊玩方式" << endl;
 
     while (true)
-    {
+    {   
+
         eventProgress = Event::progressing;
         int currentPlayerRoom = p.getRoom(); 
         int currentHp = p.getHealthPoint();
@@ -121,10 +132,12 @@ int main()
             alive = false;
             break;
         }
-        // 取得當前房間中的物品列表
+        // testing value print
+        cout << "EventProgress : " << eventProgress << endl;
 
+        // 取得當前房間中的物品列表
         vector<Item*> itemsInCurrentRoom = m.roomItems[static_cast<Map::Room>(currentPlayerRoom)];
-        vector<PureItem> bag = p.bag;
+        vector<PureItem*> bag = p.bag;
         int Itemcnt = itemsInCurrentRoom.size();
         int numInBag = bag.size();
         int convertedNumber;
@@ -132,7 +145,7 @@ int main()
         // 切換地圖時: switchMap + " " + 1~9的整數
 
         cin >> cmd >> obj;
-        Item objItem;
+        Item* objItem;
 
         // 確認obj是否為存在此房間且可視的item 或 存在的房間
 
@@ -148,6 +161,18 @@ int main()
                 int convertedNumber = stoi(obj);
             }
         }
+        else if (cmd == "showRoom") {
+            cout << "目前位置：" << currentPlayerRoom << endl;
+            showValidItemsInRoom(itemsInCurrentRoom, Itemcnt);
+            continue;
+        }
+        else if (cmd == "showBag") {
+            cout << "目前背包裡有：";
+            for (Item* itemInBag : pPtr->bag )
+                cout << itemInBag->getName() << ", ";
+            cout << endl;
+            continue;
+        }
         else if (cmd == "attack" or cmd == "talk" or cmd == "interact" or cmd == "observe")
         {
             if (!isValidObj(obj, Itemcnt, itemsInCurrentRoom))
@@ -160,40 +185,42 @@ int main()
         // 將obj 轉換成 Item 物件
         for (int i = 0; i < Itemcnt; i++)
         {
-            if (itemsInCurrentRoom[i]->getName() == obj and itemsInCurrentRoom[i]->getDisable())
+            if (itemsInCurrentRoom[i]->getName() == obj && !itemsInCurrentRoom[i]->getDisable())
             {
-                objItem = *itemsInCurrentRoom[i];
+                objItem = itemsInCurrentRoom[i];
             }
         }
 
         // 各個Event的結束條件，結束後更新progress
-
         if (eventProgress == 0)
         {
             if (cmd == "attack" and obj == "cabinet")
-            {
+            {   
+                string goStorageRoomDialog = "你穿過木櫃，穿過了一段通道，進到了一個充滿灰塵的小房間。"; //穿過儲藏室台詞
+                string loseBloodDialog = "hp - 10";
                 g.attack(objItem);
                 // 檢查玩家是否有長燭台
                 for (int i = 0; i < numInBag; i++)
                 {
-                    if (bag[i].getName() == "long_candlestick")
+                    if (bag[i]->getName() == "long_candlestick")
                     {
-                        cout << "前進儲藏室的台詞" << endl;
+                        cout << goStorageRoomDialog << endl;
                         startEvent->turnoff();
                         startEvent->end(1, p, -1);
                         g.switchMap(1);
                         continue;
                     }
                 }
-                cout << "扣血台詞" << endl;
-                cout << "前進儲藏室的台詞 " << endl;
+                cout << loseBloodDialog << endl;
+                cout << goStorageRoomDialog << endl;
+
                 startEvent->turnoff();
                 startEvent->end(1, p, -1);
                 g.switchMap(1);
                 continue;
             }
         }
-        else if (eventProgress == 1 or eventProgress == -1)
+        else if (eventProgress == 1 || eventProgress == -1)
         {
             // 如果kitchen沒被觸發過就開始事件
             if (cmd == "switchMap")
@@ -202,13 +229,7 @@ int main()
                 {
                     g.switchMap(convertedNumber);
 
-                    // 輸出當前房間中的物品名稱
-                    cout << "所在的房間有 : ";
-                    for (int i = 0; i < Itemcnt; i++)
-                    {
-                        cout << itemsInCurrentRoom[i]->getName() << ", ";
-                    }
-                    cout << endl;
+                    showValidItemsInRoom(itemsInCurrentRoom, Itemcnt);
 
                     if (!(kitchen->isprogressing()))
                     {
@@ -223,7 +244,7 @@ int main()
                 // 檢查玩家是否有葡萄
                 for (int i = 0; i < numInBag; i++)
                 {
-                    if (bag[i].getName() == "grape")
+                    if (bag[i]->getName() == "grape")
                     {
                         cout << "『謝謝你！你不是葡萄小偷！』" << endl;
                         kitchen->turnoff();
@@ -245,12 +266,7 @@ int main()
                     g.switchMap(convertedNumber);
 
                     // 輸出當前房間中的物品名稱
-                    cout << "所在的房間有 : ";
-                    for (int i = 0; i < Itemcnt; i++)
-                    {
-                        cout << itemsInCurrentRoom[i]->getName() << ", ";
-                    }
-                    cout << endl;
+                    showValidItemsInRoom(itemsInCurrentRoom, Itemcnt);
 
                     if (!(hierarch->isprogressing()))
                     {
@@ -278,23 +294,19 @@ int main()
 
             for (int i = 0; i < numInBag; i++)
             {
-                if ((bag[i].getName() == "key_to_outside") and ending == 0)
+                if ((bag[i]->getName() == "key_to_outside") and ending == 0)
                 {
                     int sp = p.getSanityPoint();
                     int ep = p.getErosionPoint();
                     ending = story.checkEnding(sp, ep);
                 }
-                else if ((bag[i].getName() == "key_to_outside") and cmd == "switchMap" and convertedNumber == 0)
+                else if ((bag[i]->getName() == "key_to_outside") and cmd == "switchMap" and convertedNumber == 0)
                 {
                     g.switchMap(convertedNumber);
 
                     // 輸出當前房間中的物品名稱
-                    cout << "所在的房間有 : ";
-                    for (int i = 0; i < Itemcnt; i++)
-                    {
-                        cout << itemsInCurrentRoom[i]->getName() << ", ";
-                    }
-                    cout << endl;
+                    showValidItemsInRoom(itemsInCurrentRoom, Itemcnt);
+
                     finalEvent->start(3);
                     continue;
                 }
@@ -318,7 +330,7 @@ int main()
                     int mirrorNum = 0;
                     for (int i = 0; i < numInBag; i++)
                     {
-                        if ((bag[i].getName() == "piece_of_mirror_1") or (bag[i].getName() == "piece_of_mirror_2") or (bag[i].getName() == "piece_of_mirror_3"))
+                        if ((bag[i]->getName() == "piece_of_mirror_1") or (bag[i]->getName() == "piece_of_mirror_2") or (bag[i]->getName() == "piece_of_mirror_3"))
                         {
                             mirrorNum++;
                         }
@@ -326,7 +338,7 @@ int main()
                     if (mirrorNum == 3) // 鏡子蒐集齊
                     {   
                         g.attack(objItem); 
-                        if (ending = 1) // 侵蝕度高->結局1
+                        if (ending == 1) // 侵蝕度高->結局1
                         {   
                             cout << "台詞" << endl;
                             finalEvent->end(1, p, 4);
@@ -334,7 +346,7 @@ int main()
                             ending1->start(4);
                             break;
                         }
-                        else if (ending = 4) // 侵蝕度低->結局4
+                        else if (ending == 4) // 侵蝕度低->結局4
                         {
                             cout << "台詞" << endl;
                             finalEvent->end(1, p, 7);

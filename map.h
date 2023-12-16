@@ -24,8 +24,7 @@ public:
         protagonistRoom,//6主角房 
         usurperRoom,//7篡位者房 
         leaderRoom,//8教主房 
-        laboratory//9實驗室 
-    
+        laboratory//9實驗室  
     };
 
     // 使用map來儲存每個房間的物品

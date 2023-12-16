@@ -20,14 +20,14 @@ public:
 	void updateSanityPoint(int newSanityPoint);
 	void updateErosionPoint(int newErosionPoint);
 	void updateMap(Map newMap);
-	void updateBag(vector<PureItem> newBag);
+	void updateBag(vector<PureItem*> newBag);
 	void setRoom(int room);
 	Map getMap();
 	int getHealthPoint();
 	int getSanityPoint();
 	int getErosionPoint();
 	int getRoom();
-	vector<PureItem> bag;
+	vector<PureItem*> bag;
 
 };
 #endif

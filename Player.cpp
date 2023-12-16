@@ -27,7 +27,7 @@ void Player::updateMap(Map newMap)
 {
 	map = newMap;
 }
-void Player::updateBag(vector<PureItem> newBag)
+void Player::updateBag(vector<PureItem*> newBag)
 {
 	bag = newBag;
 }

@@ -16,9 +16,9 @@ void Game::setPlayer(Player *pPtr)
     this->pPtr = pPtr;
 }
 
-void Game::attack(Item &i)
+void Game::attack(Item* i)
 {
-    int* result = i.useItem(ATTACK);
+    int* result = i->useItem(ATTACK);
     int h = result[0];
     int s = result[1];
     int e = result[2];
@@ -40,9 +40,9 @@ void Game::attack(Item &i)
     }
 }
 
-void Game::talk(Item &i)
+void Game::talk(Item* i)
 {
-    int* result = i.useItem(TALK);
+    int* result = i->useItem(TALK);
     int h = result[0];
     int s = result[1];
     int e = result[2];
@@ -64,9 +64,9 @@ void Game::talk(Item &i)
     }
 }
 
-void Game::interact(Item &i)
-{
-    int* result = i.useItem(INTERACT);
+void Game::interact(Item* i)
+{   
+    int* result = i->useItem(INTERACT);
     int h = result[0];
     int s = result[1];
     int e = result[2];
@@ -87,20 +87,21 @@ void Game::interact(Item &i)
         pPtr->updateMap(presentMap);
     }
     // 如果為可取得的物品，交互完畢直接放進背包
-    if (i.getTakable()) {
+    if (i->getTakable()) {
         // 複製物品進入背包
-        vector<PureItem> pBag = pPtr->bag;
-        pBag.push_back(*(new PureItem(((PureItem*)&i)))); 
+        vector<PureItem*> pBag(pPtr->bag);
+        PureItem* pi = new PureItem((PureItem*)&i);
+        pBag.push_back(pi); 
         pPtr->updateBag(pBag);
 
         // 地圖上的道具設為不可見
-        i.updateDisable();
+        i->updateDisable();
     }
 }
 
-void Game::observe(Item &i)
+void Game::observe(Item* i)
 {
-    int* result = i.useItem(OBSERVE);
+    int* result = i->useItem(OBSERVE);
     int h = result[0];
     int s = result[1];
     int e = result[2];
