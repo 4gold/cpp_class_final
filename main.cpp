@@ -148,7 +148,7 @@ int main()
         string cmdStr;
         getline(cin, cmdStr);
         vector<string> cmds = FuncPool::split(cmdStr, " ");
-        if (cmds.size() > 2) {
+        if (cmds.size() > 2 || cmds.size() == 0) {
             cout << "請輸入有效指令";
             continue;
         } 
@@ -235,7 +235,8 @@ int main()
             // 如果kitchen沒被觸發過就開始事件
             if (cmd == "switchMap" && convertedNumber == 2)
             {
-                g.switchMap(convertedNumber);
+                bool canMove = g.switchMap(convertedNumber);
+                if (!canMove) continue;
 
                 // 更新現有房間內的物品
                 currentPlayerRoom = convertedNumber;
@@ -281,13 +282,13 @@ int main()
         {
             // 如果hierarch沒被觸發過就開始事件
             if (cmd == "switchMap")
-            {
-                if ((convertedNumber == 8) && !hierarch->isprogressing())
-                {   
+            {   
+                bool canMove = g.switchMap(convertedNumber);
+                if (!canMove) continue;
 
-                    bool canMove = g.switchMap(convertedNumber);
-                    if (!canMove) continue;
-                    currentPlayerRoom = convertedNumber;
+                if ((convertedNumber == 8) && !hierarch->isprogressing())
+                {                    
+                    currentPlayerRoom = canMove ? convertedNumber : currentPlayerRoom;
                     itemsInCurrentRoom = m.roomItems[static_cast<Map::Room>(currentPlayerRoom)];
 
                     if ((hierarch->isactive()))
@@ -299,7 +300,7 @@ int main()
                     continue;
                 } // 只會在第一次離開教主房間時啟動, 順便結束這個event
                 else if (hierarch->isprogressing())
-                {
+                {   
                     cout << "當你要離開房間時，牆邊的雕像突然傾斜，向著房間倒去。你趕緊躲開，只見雕像撞破掛畫，露出了後面的空間（9）。\n"
                         <<  "你好像從雕像破碎的縫隙中看到了人的皮膚。" << endl;
                     flag2 = false;
@@ -330,8 +331,8 @@ int main()
                 }
                 else if ((bag[i]->getName() == "key_to_outside") and cmd == "switchMap" and convertedNumber == 0)
                 {
-                    g.switchMap(convertedNumber);
-                    currentPlayerRoom = convertedNumber;
+                    bool canMove = g.switchMap(convertedNumber);
+                    currentPlayerRoom = canMove ? convertedNumber : currentPlayerRoom;
                     itemsInCurrentRoom = m.roomItems[static_cast<Map::Room>(currentPlayerRoom)];
 
                     finalEvent->start(3);
@@ -417,7 +418,7 @@ int main()
         if (cmd == "switchMap")
         {
             int convertedNumber = stoi(obj);
-            if (convertedNumber <= 9 and convertedNumber > 0)
+            if (convertedNumber <= 9 and convertedNumber >= 0)
             {
                 g.switchMap(convertedNumber);
                 // 更新現有房間內的物品
@@ -501,7 +502,7 @@ void initializeAllKeyItems(map<string, Item*> &items, Player* player) {
     PureItem* sculpture = new PureItem("雕像", "sculpture", false, true, false, 0);
 
     PureItem* diary_lab = new PureItem("實驗紀錄", "diary_lab", false, false, false, 6);
-    PureItem* trash_can = new PureItem("垃圾桶", "trash_can", true, false, false, 0);
+    PureItem* trash_can = new PureItem("垃圾桶", "trash_can", false, false, false, 0);
     
     PureItem* key_to_outside = new PureItem("大門的鑰匙", "key_to_outside", false, false, true, 0);
     PureItem* sink = new PureItem("水槽", "sink", false, true, false, 0);
@@ -530,8 +531,8 @@ void initializeAllKeyItems(map<string, Item*> &items, Player* player) {
     //door_leader_to_west_hallway->addRelatedItem(sculpture, RELATED_STATE::LOCK);
     //door_leader_to_west_hallway->addRelatedItem(painting_on_wall, RELATED_STATE::LOCK);
 
-    // 5. 實驗室日記交流後出現垃圾桶，垃圾桶交流後出現鏡子碎片2
-    diary_lab->addRelatedItem(trash_can, RELATED_STATE::DISABLE);
+    // 5. 垃圾桶交流後出現鏡子碎片2
+    //diary_lab->addRelatedItem(trash_can, RELATED_STATE::DISABLE);
     trash_can->addRelatedItem(piece_of_mirror_2, RELATED_STATE::DISABLE);
     
 
@@ -547,6 +548,9 @@ void initializeAllKeyItems(map<string, Item*> &items, Player* player) {
 
     // 9. 羊寶寶玩偶交流後廚師狀態變更
     plush_toy->addRelatedItem(cook, RELATED_STATE::PHASE);
+
+    // 10. 拿到大門鑰匙後
+    key_to_outside->addRelatedItem(god_pearl, RELATED_STATE::DISABLE);
 
     // -------------------- insert items-------------------------------
     items.insert(pair<string, Item*>("cook", cook));

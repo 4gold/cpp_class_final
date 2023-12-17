@@ -274,8 +274,8 @@ string* DialogStrings::getDialogPureItemString(const string name, const bool loc
                 setDialogStrings(ds, 
                 "",
                 "你假裝要打向水槽，然後把手洗了乾淨。",
-                "你拿起了鏡子碎片。",
-                "廚房的水槽，你看到裡面有一片鏡子碎片");
+                "廚房的水槽，你看到裡面有一片鏡子碎片。",
+                "廚房的水槽，你看到裡面有一片鏡子碎片。");
             } else {
                 // 拿走鏡子碎片2後
                 setDialogStrings(ds, 
@@ -289,7 +289,7 @@ string* DialogStrings::getDialogPureItemString(const string name, const bool loc
             setDialogStrings(ds, 
             "",
             "",
-            "你拿起了大門的鑰匙。",
+            "你拿起了大門的鑰匙，這應該就是通往外面的門鑰匙。",
             "你有預感這東西可以帶你離開。");
             break;
         case "god_pearl"_hash: 
