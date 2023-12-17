@@ -40,7 +40,6 @@ class HumanItem : public Item {
         bool fightSim(int npcHealth, int playerHealth); // 觸發戰鬥
         void setDead(); // 設為死亡
         int updatePhase();
-        void reloadDialog();
     public:
         
         HumanItem() : Item(), health(5), phase(INIT_PHASE){
@@ -69,6 +68,7 @@ class HumanItem : public Item {
         };
 
         ~HumanItem() {};
+        void reloadDialog();
         
 };
 

@@ -246,7 +246,7 @@ int main()
                     kitchen->start(1);
                     // 觸發事件後儲藏室物品才可見。
                     for (Item* itemInStorage : m.roomItems[static_cast<Map::Room>(m.storageRoom)]) {
-                        if (itemInStorage->getName().find("door") >= 0) // 對象為門則不要設定。
+                        if (itemInStorage->getName().find("door") != string::npos) // 對象為門則不要設定。
                             continue;
                         itemInStorage->updateDisable();
                     }

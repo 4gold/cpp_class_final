@@ -29,7 +29,6 @@ class PureItem : public Item {
         bool observedAct();
         int updateLock(); // 更新道具鎖定的狀態
         int updatephase();
-        void reloadDialog(); 
     public:
         PureItem() : Item() {};
         PureItem(const string chineseName, const string name) : PureItem(chineseName, name, false, false, false, 0) {};// 非關鍵道具default
@@ -57,6 +56,7 @@ class PureItem : public Item {
         
         ~PureItem() {}; 
         bool getTakable() const;
+        void reloadDialog(); 
 
 };
 
