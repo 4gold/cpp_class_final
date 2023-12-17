@@ -24,7 +24,7 @@ public:
     Game();
     ~Game();
     void setPlayer(Player *pPtr);
-    void switchMap(int room);
+    bool switchMap(int room);
     void attack(Item *i);
     void talk(Item *i);
     void interact(Item *i);

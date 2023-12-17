@@ -277,36 +277,37 @@ int main()
                 continue;
             }
         }
-        else if (eventProgress == 2 or eventProgress == -2)
+        else if (eventProgress == 2 || eventProgress == -2)
         {
             // 如果hierarch沒被觸發過就開始事件
             if (cmd == "switchMap")
             {
-                if (convertedNumber == 8)
-                {
-                    g.switchMap(convertedNumber);
+                if ((convertedNumber == 8) && !hierarch->isprogressing())
+                {   
+
+                    bool canMove = g.switchMap(convertedNumber);
+                    if (!canMove) continue;
                     currentPlayerRoom = convertedNumber;
                     itemsInCurrentRoom = m.roomItems[static_cast<Map::Room>(currentPlayerRoom)];
 
                     if ((hierarch->isactive()))
                     {
-                        hierarch->start(1);
-                        hierarch->readLines();
+                        hierarch->start(2);
                         int sp = p.getSanityPoint();
                         p.updateSanityPoint(sp - 1);
                     }
                     continue;
-                }
-                // 只會在第一次離開教主房間時啟動, 順便結束這個event
-                else if (flag2)
+                } // 只會在第一次離開教主房間時啟動, 順便結束這個event
+                else if (hierarch->isprogressing())
                 {
-                    cout << "要離開房間時，神像會倒下撞破掛畫，發現後面的實驗室。同時也會發現神像裡面有屍體" << endl;
+                    cout << "當你要離開房間時，牆邊的雕像突然傾斜，向著房間倒去。你趕緊躲開，只見雕像撞破掛畫，露出了後面的空間（9）。\n"
+                        <<  "你好像從雕像破碎的縫隙中看到了人的皮膚。" << endl;
                     flag2 = false;
                     hierarch->turnoff();
                     hierarch->end(3, p, -10);
                     continue;
                 }
-            }
+            } 
         }
         else if (eventProgress == -10) // 離開教主房間後拿到鑰匙之前
         {

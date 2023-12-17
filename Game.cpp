@@ -123,7 +123,7 @@ void Game::observe(Item* i)
     }
 }
 
-void Game::switchMap(int newRoom)
+bool Game::switchMap(int newRoom)
 {
     // 只要isvalidmove就直接移動
     int currentRoomIndex = pPtr->getRoom();
@@ -137,6 +137,7 @@ void Game::switchMap(int newRoom)
     } else {
         cout << "無效的移動" << endl;
     }
+    return canMove;
 }
 
 void Game::help()
