@@ -21,6 +21,7 @@ const int INIT_PHASE = 1;
  * HumanItem 會有 dead 以及 alive 的兩種狀態。alive狀態下的human也會有不同劇情階段的台詞。
 */
 class HumanItem : public Item {
+    friend class PureItem;
     private:
         int health; // 生命值歸零為死亡，預設 5
         /* 
@@ -39,6 +40,7 @@ class HumanItem : public Item {
         bool fightSim(int npcHealth, int playerHealth); // 觸發戰鬥
         void setDead(); // 設為死亡
         int updatePhase();
+        void reloadDialog();
     public:
         
         HumanItem() : Item(), health(5), phase(INIT_PHASE){

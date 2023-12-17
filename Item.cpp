@@ -127,7 +127,8 @@ void Item::defaultAct(INTERACT_TYPE act, string type, int determinant) {
 
     // print 對應的台詞
     string actDialog = this->dialog->getDialog(act);
-    if (actDialog.empty() && determinant == 0) // dead
+    if ((actDialog.empty() && determinant == 0) || 
+         (type == INTERACT_TYPE_H::TYPE_NPC && determinant == 0)) // dead
         FuncPool::delayCout(defaultDeadOrLockDialog->getDialog(act));
     else if (actDialog.empty() && determinant >= 1) // alive default
         FuncPool::delayCout(defaultAliveOrOpenDialog->getDialog(act));

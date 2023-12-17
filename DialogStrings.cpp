@@ -75,15 +75,16 @@ string* DialogStrings::getDialogNPCString(const string name, const int phase) {
                 setDialogStrings(ds, 
                 "「葡萄！葡萄！」",
                 "整個餐廳的人都盯著你。",
-                "「嘿嘿嘿嘿嘿嘿。」",
+                "「我的葡萄呢？快給我葡萄！」",
                 "眼匡凹陷、形容枯槁的人，正拿著叉子往空盤不停地揮舞。");
                 break;
             case 2: // 拿到葡萄後
                 setDialogStrings(ds, 
-                "他接走了你手上的葡萄，一口吞下，接著走到餐廳大門幫你把門打開。",
-                "整個餐廳的人都盯著你。",
                 "「我的葡萄呢？」",
+                "整個餐廳的人都盯著你。",
+                "他接走了你手上的葡萄，一口吞下，接著走到餐廳大門幫你把門打開。",
                 "眼匡凹陷、形容枯槁的人，正拿著叉子往空盤不停地揮舞。");
+                break;
             case 3: // 給他葡萄後
                 setDialogStrings(ds,
                 "他開始專心地吃飯，不理會你了。",
@@ -91,6 +92,7 @@ string* DialogStrings::getDialogNPCString(const string name, const int phase) {
                 "他開始專心地吃飯，不理會你了。",
                 "眼匡凹陷、形容枯槁的人，正在吃飯。"
                 );
+                break;
             default:
                 break;
             }

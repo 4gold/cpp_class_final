@@ -102,3 +102,7 @@ bool HumanItem::observedAct() {
 int HumanItem::updatePhase() {
     return ++(this->phase);
 }
+
+void HumanItem::reloadDialog() {
+    this->dialog->loadNpcDialog(this->name, this->phase);
+}

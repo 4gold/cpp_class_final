@@ -233,43 +233,48 @@ int main()
         else if (eventProgress == 1 || eventProgress == -1)
         {
             // 如果kitchen沒被觸發過就開始事件
-            if (cmd == "switchMap")
+            if (cmd == "switchMap" && convertedNumber == 2)
             {
-                
-                if (convertedNumber == 2)
-                {   
-                    
-                    g.switchMap(convertedNumber);
+                g.switchMap(convertedNumber);
 
-                    // 更新現有房間內的物品
-                    itemsInCurrentRoom = m.roomItems[static_cast<Map::Room>(currentPlayerRoom)];
-                    showValidItemsInRoom(itemsInCurrentRoom, Itemcnt);
+                // 更新現有房間內的物品
+                currentPlayerRoom = convertedNumber;
+                itemsInCurrentRoom = m.roomItems[static_cast<Map::Room>(currentPlayerRoom)];
+                showValidItemsInRoom(itemsInCurrentRoom, Itemcnt);
 
-                    if ((kitchen->isactive()))
-                    {
-                        kitchen->start(1);
-                        // 觸發事件後儲藏室物品才可見。
-                        for (Item* itemInStorage : m.roomItems[static_cast<Map::Room>(m.storageRoom)])
-                            itemInStorage->updateDisable();
+                if (kitchen->isactive() && !kitchen->isprogressing()) //事件未被觸發過，且並未在執行中
+                {
+                    kitchen->start(1);
+                    // 觸發事件後儲藏室物品才可見。
+                    for (Item* itemInStorage : m.roomItems[static_cast<Map::Room>(m.storageRoom)]) {
+                        if (itemInStorage->getName().find("door") < 0) // 對象為門則不要設定。
+                            continue;
+                        itemInStorage->updateDisable();
                     }
-                    continue;
                 }
+                continue;         
             }
             // 結束條件
-            if ((cmd == "interact" and obj == "weird_grape_guy") and (kitchen->isprogressing()))
-            {
+            if ((cmd == "interact" && obj == "weird_grape_guy") && (kitchen->isprogressing()))
+            {   
+                bool hasGrape = false;
                 // 檢查玩家是否有葡萄
                 for (int i = 0; i < numInBag; i++)
                 {
                     if (bag[i]->getName() == "grape")
-                    {
-                        cout << "『謝謝你！你不是葡萄小偷！』" << endl;
-                        kitchen->turnoff();
-                        kitchen->end(2, p, -2);
-                        continue;
-                    }
-                }
-                g.interact(objItem);
+                        hasGrape = true;
+                          
+                } 
+                g.interact(objItem);   
+                
+                if (hasGrape) {
+                    //葡萄怪人狀態更新。
+                    allItems["weird_grape_guy"]->updatePhase(); 
+                    allItems["weird_grape_guy"]->reloadDialog(); 
+
+                    kitchen->turnoff();
+                    kitchen->end(2, p, -2);
+                }        
                 continue;
             }
         }
@@ -415,15 +420,8 @@ int main()
                 itemsInCurrentRoom = m.roomItems[static_cast<Map::Room>(currentPlayerRoom)];
 
                 // // 輸出當前房間中的物品名稱
-                cout << "這個房間有 : ";
-                for (int i = 0; i < Itemcnt; i++)
-                {
-                    if(!itemsInCurrentRoom[i]->getDisable())
-                    {
-                    cout << itemsInCurrentRoom[i]->getName() << ", ";
-                    }
-                }
-                cout << endl;
+                showValidItemsInRoom(itemsInCurrentRoom, Itemcnt);
+
                 continue;
             }
             else
@@ -622,6 +620,9 @@ void initializeAllNoneKeyItems(map<string, Item*> &allItems, Map &map) {
         allItems.insert(pair<string, Item*>(name, item));
     }
     filein.close();
+
+    // 設定初始數值
+    allItems["watermelon"]->updateDisable(); //設為不可見
 }
 
 
@@ -646,7 +647,7 @@ void evenInitializer()
     // 餐廳事件 1
     int kitchenLen = 10;
     vector<string> kitchenLines = {
-        " 突然餐桌傳來一聲尖叫：",
+        " 你剛進走進房間，一聲尖叫突然傳進你的耳中：",
         "『我的葡萄！我的葡萄！有人偷了我的葡萄！』",
         " 你看向餐桌，一個表情癲狂的人揮舞著叉子大叫。說完他望向你，眼神充滿猜疑與憤怒",
         "『是你吧！是你偷了吧！』",
@@ -669,7 +670,7 @@ void evenInitializer()
         " 蟲群從手腕蔓延到手臂、脖子、下巴…慢慢覆蓋上你所有浸在水中的身體部位 ",
         " 你的臉上感受到一陣疼痛，是蟲子在啃噬你的皮膚！",
         " 你嚇壞了，掙扎著想逃離卻無法動彈。恐慌中你嗆到了水，缺氧讓意識模糊，你只記得你在意識消散前，隱隱看到蟲子開始覆上了眼睛…",
-        " 你從幻覺中醒來了（理智-1)",
+        " 你從幻覺中醒來了（理智-10)",
         " 掛畫上畫著一群穿著同樣衣服的人，牽手圍著某個人，從上方有一道光打在被圍住的人身上。"};
 
     Event* hierarch = new Event(hierarchLines, hierarchLens);

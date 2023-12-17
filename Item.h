@@ -80,6 +80,9 @@ class Item {
         // dialog直接印在terminal
         int* useItem(INTERACT_TYPE action);
 
+        // 依照當前物件設定重新讀取一次對話設定
+        virtual void reloadDialog() {cout << "reload failed" << endl; };
+
 
         /*
           預設的回覆。

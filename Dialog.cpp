@@ -37,6 +37,7 @@ void Dialog::updatePureItemDialog(const string name, bool lock, int page) {
 };
 
 void Dialog::loadNpcDialog(string name, int phase) {
+    //cout << "load - " << name << " : " << phase << endl;
     if (this->dialogues != nullptr)
         delete [] this->dialogues;
     this->dialogues = DialogStrings::getDialogNPCString(name, phase);

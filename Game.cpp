@@ -134,8 +134,9 @@ void Game::switchMap(int newRoom)
     {
         pPtr->setRoom(newRoom);
         cout << "移動至 : " << static_cast<Map::Room>(newRoom) << endl;
+    } else {
+        cout << "無效的移動" << endl;
     }
-    cout << "無效的移動" << endl;
 }
 
 void Game::help()

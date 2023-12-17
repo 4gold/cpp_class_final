@@ -1,5 +1,5 @@
 #include "PureItem.h"
-
+#include "HumanItem.h"
 
 bool PureItem::getTakable() const {
     return this->takable;
@@ -20,8 +20,9 @@ bool PureItem::interactedAct() {
         if (changeTarget == RELATED_STATE::DISABLE) { // 將對象修改為可用／不可用。
             (changeItem)->updateDisable();
         } else if (changeTarget == RELATED_STATE::PHASE) { // phase 改變，台詞要跟著改變。
-            ((PureItem*)changeItem)->dialog->updateNpcDialog(
-                changeItem->getName(), updatePhase()
+            ((HumanItem*)changeItem)->updatePhase();
+            ((HumanItem*)changeItem)->dialog->updateNpcDialog(
+                changeItem->getName(), ((HumanItem*)changeItem)->phase
             );
         } else if (changeTarget == RELATED_STATE::LOCK) { // lock 改變，台詞要跟著改變。
             (changeItem)->updateLock();
@@ -45,5 +46,7 @@ int PureItem::updateLock() {
     return this->lock;
 }
 
-
+void PureItem::reloadDialog() {
+    this->dialog->loadPureItemDialog(this->name, this->lock, this->page);
+}
 
