@@ -4,16 +4,28 @@ Map::Map() {
     // 初始化房間之間的連接狀態
     roomConnections[make_pair(ritualRoom, storageRoom)] = false;
     roomConnections[make_pair(storageRoom, ritualRoom)] = false;
+
     roomConnections[make_pair(storageRoom, restaurant)] = true;
     roomConnections[make_pair(restaurant, storageRoom)] = true;
+
+    roomConnections[make_pair(eastCorridor, westCorridor)] = true;
+    roomConnections[make_pair(westCorridor, eastCorridor)] = true;
+
     roomConnections[make_pair(restaurant, eastCorridor)] = false;
     roomConnections[make_pair(eastCorridor, restaurant)] = false;
+
     roomConnections[make_pair(eastCorridor, protagonistRoom)] = true;
     roomConnections[make_pair(protagonistRoom, eastCorridor)] = true;
+
     roomConnections[make_pair(eastCorridor, usurperRoom)] = true;
     roomConnections[make_pair(usurperRoom, eastCorridor)] = true;
+
+    roomConnections[make_pair(leaderRoom, westCorridor)] = true;
+    roomConnections[make_pair(westCorridor, leaderRoom)] = true;
+
     roomConnections[make_pair(leaderRoom, laboratory)] = false;
     roomConnections[make_pair(laboratory, leaderRoom)] = false;
+    
     roomConnections[make_pair(restaurant, kitchen)] = false;
     roomConnections[make_pair(kitchen, restaurant)] = false;
 }
