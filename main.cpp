@@ -303,6 +303,13 @@ int main()
                     cout << "當你要離開房間時，牆邊的雕像突然傾斜，向著房間倒去。你趕緊躲開，只見雕像撞破掛畫，露出了後面的空間（9）。\n"
                         <<  "你好像從雕像破碎的縫隙中看到了人的皮膚。" << endl;
                     flag2 = false;
+
+                    //雕像、掛畫狀態更新。
+                    allItems["painting_on_wall"]->updateLock(); 
+                    allItems["sculpture"]->updateLock(); 
+                    allItems["painting_on_wall"]->reloadDialog(); 
+                    allItems["sculpture"]->reloadDialog(); 
+
                     hierarch->turnoff();
                     hierarch->end(3, p, -10);
                     continue;
@@ -499,7 +506,7 @@ void initializeAllKeyItems(map<string, Item*> &items, Player* player) {
     PureItem* key_to_outside = new PureItem("大門的鑰匙", "key_to_outside", false, false, true, 0);
     PureItem* sink = new PureItem("水槽", "sink", false, true, false, 0);
 
-    PureItem* drawer = new PureItem("抽屜", "drawer", true, false, false, 0);
+    PureItem* drawer = new PureItem("抽屜", "drawer", true, true, false, 0);
     PureItem* diary_player = new PureItem("日記", "diary_player", false, true, false, 6);
     PureItem* plush_toy = new PureItem("羊寶寶玩偶", "plush_toy", false, false, true, 0);
 
@@ -531,8 +538,9 @@ void initializeAllKeyItems(map<string, Item*> &items, Player* player) {
     // 6. 主角日記交流後出現抽屜
     diary_player->addRelatedItem(drawer, RELATED_STATE::DISABLE);
 
-    // 7. 抽屜交流後出現鏡子碎片1
+    // 7. 抽屜交流後出現鏡子碎片1 / 取得鏡子碎片1修改抽屜狀態
     drawer->addRelatedItem(piece_of_mirror_1, RELATED_STATE::DISABLE);
+    piece_of_mirror_1->addRelatedItem(drawer, RELATED_STATE::LOCK);
 
     // 8. 水槽交流後出現鏡子碎片3
     sink->addRelatedItem(piece_of_mirror_3, RELATED_STATE::DISABLE);
