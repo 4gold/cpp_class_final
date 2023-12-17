@@ -57,6 +57,7 @@ string* DialogStrings::getDialogNPCString(const string name, const int phase) {
                 "",
                 "「不要過來！」",
                 "他很害怕你。");
+                break;
             default:
                 break;
             }

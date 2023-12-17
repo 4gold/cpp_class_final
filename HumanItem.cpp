@@ -78,7 +78,7 @@ bool HumanItem::interactedAct() {
             (changeItem)->updateDisable();
         } else if (changeTarget == RELATED_STATE::PHASE) { // phase 改變，台詞要跟著改變。
             ((HumanItem*)changeItem)->dialog->updateNpcDialog(
-                changeItem->getName(), updatePhase()
+                changeItem->getName(), changeItem->updatePhase()
             );
         } else if (changeTarget == RELATED_STATE::LOCK) { // lock 改變，台詞要跟著改變。
             (changeItem)->updateLock();
