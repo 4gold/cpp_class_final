@@ -537,7 +537,7 @@ void initializeAllKeyItems(map<string, Item*> &items, Player* player) {
     sink->addRelatedItem(piece_of_mirror_3, RELATED_STATE::DISABLE);
 
     // 9. 羊寶寶玩偶交流後廚師狀態變更
-    plush_toy->addRelatedItem(cook, RELATED_STATE::LOCK);
+    plush_toy->addRelatedItem(cook, RELATED_STATE::PHASE);
 
     // -------------------- insert items-------------------------------
     items.insert(pair<string, Item*>("cook", cook));
