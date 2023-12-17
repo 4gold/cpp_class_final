@@ -240,14 +240,13 @@ int main()
                 // 更新現有房間內的物品
                 currentPlayerRoom = convertedNumber;
                 itemsInCurrentRoom = m.roomItems[static_cast<Map::Room>(currentPlayerRoom)];
-                showValidItemsInRoom(itemsInCurrentRoom, Itemcnt);
 
                 if (kitchen->isactive() && !kitchen->isprogressing()) //事件未被觸發過，且並未在執行中
                 {
                     kitchen->start(1);
                     // 觸發事件後儲藏室物品才可見。
                     for (Item* itemInStorage : m.roomItems[static_cast<Map::Room>(m.storageRoom)]) {
-                        if (itemInStorage->getName().find("door") < 0) // 對象為門則不要設定。
+                        if (itemInStorage->getName().find("door") >= 0) // 對象為門則不要設定。
                             continue;
                         itemInStorage->updateDisable();
                     }
@@ -266,7 +265,7 @@ int main()
                           
                 } 
                 g.interact(objItem);   
-                
+
                 if (hasGrape) {
                     //葡萄怪人狀態更新。
                     allItems["weird_grape_guy"]->updatePhase(); 
@@ -286,9 +285,8 @@ int main()
                 if (convertedNumber == 8)
                 {
                     g.switchMap(convertedNumber);
-
-                    // 輸出當前房間中的物品名稱
-                    showValidItemsInRoom(itemsInCurrentRoom, Itemcnt);
+                    currentPlayerRoom = convertedNumber;
+                    itemsInCurrentRoom = m.roomItems[static_cast<Map::Room>(currentPlayerRoom)];
 
                     if ((hierarch->isactive()))
                     {
@@ -325,9 +323,8 @@ int main()
                 else if ((bag[i]->getName() == "key_to_outside") and cmd == "switchMap" and convertedNumber == 0)
                 {
                     g.switchMap(convertedNumber);
-
-                    // 輸出當前房間中的物品名稱
-                    showValidItemsInRoom(itemsInCurrentRoom, Itemcnt);
+                    currentPlayerRoom = convertedNumber;
+                    itemsInCurrentRoom = m.roomItems[static_cast<Map::Room>(currentPlayerRoom)];
 
                     finalEvent->start(3);
                     continue;
@@ -415,12 +412,10 @@ int main()
             if (convertedNumber <= 9 and convertedNumber > 0)
             {
                 g.switchMap(convertedNumber);
-                
                 // 更新現有房間內的物品
+                currentPlayerRoom = convertedNumber;
                 itemsInCurrentRoom = m.roomItems[static_cast<Map::Room>(currentPlayerRoom)];
 
-                // // 輸出當前房間中的物品名稱
-                showValidItemsInRoom(itemsInCurrentRoom, Itemcnt);
 
                 continue;
             }
