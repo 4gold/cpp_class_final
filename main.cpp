@@ -495,7 +495,7 @@ void initializeAllKeyItems(map<string, Item*> &items, Player* player) {
     PureItem* diary_lab = new PureItem("實驗紀錄", "diary_lab", false, false, false, 6);
     PureItem* trash_can = new PureItem("垃圾桶", "trash_can", true, false, false, 0);
     
-    PureItem* key_to_outside = new PureItem("大把的鑰匙", "key_to_outside", false, false, true, 0);
+    PureItem* key_to_outside = new PureItem("大門的鑰匙", "key_to_outside", false, false, true, 0);
     PureItem* sink = new PureItem("水槽", "sink", false, true, false, 0);
 
     PureItem* drawer = new PureItem("抽屜", "drawer", true, false, false, 0);
@@ -588,6 +588,7 @@ void putKeyItemsInRoom(map<string, Item*> &items, Map& gameMap) {
 
     gameMap.addItemToRoom(gameMap.kitchen, (items["sink"]));
     gameMap.addItemToRoom(gameMap.kitchen, (items["piece_of_mirror_3"]));
+    gameMap.addItemToRoom(gameMap.kitchen, (items["key_to_outside"]));
 
     gameMap.addItemToRoom(gameMap.protagonistRoom, (items["plush_toy"]));
     gameMap.addItemToRoom(gameMap.protagonistRoom, (items["piece_of_mirror_1"]));
