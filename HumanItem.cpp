@@ -13,7 +13,7 @@ bool HumanItem::attackedAct() {
         int playerHealth = player->getHealthPoint();
         bool fightResult = fightSim(npcHealth, playerHealth);
         if (fightResult) {
-            updateEffect(INTERACT_TYPE::ATTACK, 0, 0, 0);
+            updateEffect(INTERACT_TYPE::ATTACK, 0, 0, 10); // 殺人升侵蝕度
             setDead();
         } else 
             updateEffect(INTERACT_TYPE::ATTACK, 1, 1, 0);
@@ -45,13 +45,11 @@ bool HumanItem::fightSim(int npcHealth, int playerHealth) {
         
         npcHealth -= playerHit;
         playerHealth -= npcHit;
-        
     }
 
     // 雙方同時死，無條件判定player勝利
-    if (npcHealth <= 0 && playerHealth <= 0) 
+    if ((npcHealth <= 0 && playerHealth <= 0) || (npcHealth <= 0))
         result =  true;
-    if (npcHealth <= 0) result = true;
     else result = false;
 
     FuncPool::delayCout((result ? "戰鬥勝利" : "戰鬥失敗"), true);

@@ -66,7 +66,9 @@ void showValidItemsInRoom(vector<Item*> itemsInCurrentRoom, int Itemcnt) {
 void initializeAllKeyItems(map<string, Item*> &items, Player* player); // 初始化關鍵道具
 void initializeAllNoneKeyItems(map<string, Item*> &items, Map &map); // 初始化非關鍵道具，設定在not_key_items.txt
 void putKeyItemsInRoom(map<string, Item*> &items, Map& map); // 將關鍵道具塞入地圖
+void initializeAllItemsSetting(map<string, Item*> &items); // 初始化道具的設定(扣血術數值等)
 void evenInitializer();
+
 
 /** 待補:
  * 各項東西的初始化(Map)
@@ -97,6 +99,8 @@ int main()
     initializeAllNoneKeyItems(allItems, m);
     initializeAllKeyItems(allItems, pPtr);
     putKeyItemsInRoom(allItems, m);
+
+    initializeAllItemsSetting(allItems);
 
 
     p.setRoom(Map::Room::ritualRoom);
@@ -161,12 +165,17 @@ int main()
         // 確認obj是否為存在此房間且可視的item 或 存在的房間
 
         if (cmd == "testEnding") {
+
+            cout << "player's sanity point : " << p.getSanityPoint() << endl;
+            cout << "player's erosion point : " << p.getErosionPoint() << endl;
+
             // testing
             g.interact(allItems["key_to_outside"]);
             g.interact(allItems["piece_of_mirror_1"]);
             g.interact(allItems["piece_of_mirror_2"]);
             g.interact(allItems["piece_of_mirror_3"]);
-            ending = 1;
+
+            ending = story.checkEnding(p.getSanityPoint(), p.getErosionPoint());
 
             finalEvent->start(3);
             continue;
@@ -307,7 +316,7 @@ int main()
                     {
                         hierarch->start(2);
                         int sp = p.getSanityPoint();
-                        p.updateSanityPoint(sp - 1);
+                        p.updateSanityPoint(sp - 10);
                     }
                     continue;
                 } // 只會在第一次離開教主房間時啟動, 順便結束這個event
@@ -449,7 +458,6 @@ int main()
                 }
                 else // 鏡子沒蒐集齊->結局2
                 {   
-                    cout << "台詞" << endl;
                     finalEvent->end(1, p, 5);
                     finalEvent->turnoff();
                     ending2->start(7);
@@ -694,10 +702,23 @@ void initializeAllNoneKeyItems(map<string, Item*> &allItems, Map &map) {
         map.addItemToRoom(room, item);
         allItems.insert(pair<string, Item*>(name, item));
     }
-    filein.close();
+    filein.close(); 
+}
 
+void initializeAllItemsSetting(map<string, Item*> &allItems) {
     // 設定初始數值
     allItems["watermelon"]->updateDisable(); //設為不可見
+    // act, hp, sanity, erosion
+    allItems["deadbody_ritaul_room"]->updateEffect(INTERACT_TYPE::ATTACK, 0, 0, 10); // 儀式房屍體，褻瀆屍體升侵蝕
+    allItems["watermelon"]->updateEffect(INTERACT_TYPE::ATTACK, 0, 10, 0); // 儲藏室西瓜，willson，回理智
+    allItems["sculpture"]->updateEffect(INTERACT_TYPE::ATTACK, 0, -5, 10); // 教主房雕像，裡面有人，攻擊升侵蝕度
+    allItems["bed_leader_room"]->updateEffect(INTERACT_TYPE::INTERACT, 10, 0, 0); // 教主房的床，很舒服，躺了回血
+    allItems["bed_lab"]->updateEffect(INTERACT_TYPE::ATTACK, -10, 0, 0); // 實驗室床，很硬，打了扣血
+    allItems["weird_cups"]->updateEffect(INTERACT_TYPE::INTERACT, -10, 0, 0); // 實驗室的瓶罐，打開會扣血
+    allItems["piece_of_mirror_1"]->updateEffect(INTERACT_TYPE::OBSERVE, 0, -10, 0); // 鏡子系列，看了扣理智升侵蝕
+    allItems["piece_of_mirror_2"]->updateEffect(INTERACT_TYPE::OBSERVE, 0, -10, 0); // 鏡子系列，看了扣理智升侵蝕
+    allItems["piece_of_mirror_3"]->updateEffect(INTERACT_TYPE::OBSERVE, 0, -10, 0); // 鏡子系列，看了扣理智升侵蝕
+
 }
 
 
@@ -818,7 +839,7 @@ void evenInitializer()
         "事件造成了軒然大波，而你則低調的回到了正常生活。",
         "你去醫院檢查過，身體一切正常。",
         "雖然你的經歷不可能消失，但你可以感覺到他正慢慢變成淡漠的記憶。",
-        "神明不再存在了。"
+        "神明不再存在了。",
         "Ending 4 - 沒有神的人生"
 
     };

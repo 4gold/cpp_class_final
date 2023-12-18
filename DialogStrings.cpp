@@ -209,7 +209,7 @@ string* DialogStrings::getDialogPureItemString(const string name, const bool loc
                 // 雕像倒下後
                 setDialogStrings(ds, 
                 "你在期待它回你話嗎?",
-                "別吧？",
+                "攻擊雕像讓你更興奮了。",
                 "",
                 "碎掉的雕像倒在地上，從石像碎裂的縫隙可以窺見人的皮膚。");
             }
@@ -415,7 +415,7 @@ string* DialogStrings::getDialogPureItemString(const string name, const bool loc
             setDialogStrings(ds, 
             "問了它有沒有毒，沒有得到回應。",
             "打破的話後果難以預料，再想一下。",
-            "不敢打開，說不定會飄出有毒氣體。",
+            "你打開了一個，飄出詭異的氣味，讓你很不舒服。",
             "應該是某種特殊的藥劑。"
             );
             break;

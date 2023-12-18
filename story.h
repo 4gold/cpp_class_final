@@ -8,8 +8,8 @@ class Story
 {
 private:
 
-int sanityThreshold1;
-int erosionThreshold1;
+int sanityThreshold1 = 30;
+int erosionThreshold1 = 30;
 
 int sanityThreshold2;
 int erosionThreshold2;

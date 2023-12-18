@@ -46,7 +46,6 @@ class Item {
         virtual bool interactedAct() { return true; };
         virtual bool talkedAct() { return true; };
         virtual bool observedAct() {return true; };
-        void updateEffect(const INTERACT_TYPE action, const int hp, const int sanity, const int erosion);
        
         void defaultAct(INTERACT_TYPE act, string type, int determinant);
     public:
@@ -75,6 +74,8 @@ class Item {
         virtual int updatePhase() { return -1;}; 
         // 更新disable狀態，會自動設為與現在相反的
         void updateDisable(); 
+        // 更新 物品對應動作的值
+        void updateEffect(const INTERACT_TYPE action, const int hp, const int sanity, const int erosion);
         // return 對player的影響值，依序是 {health, sanity, erosion, mapConnectionValue}
         // mapConnectionValue 會回傳指定的updateConnection() value, 不打開 Connection 回傳 -1。
         // dialog直接印在terminal

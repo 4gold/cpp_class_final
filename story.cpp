@@ -13,7 +13,7 @@ Story::~Story()
 int Story::checkEnding(int sp, int ep)
 {
 
-    if(sp < sanityThreshold1 and ep < erosionThreshold1)
+    if(sp > sanityThreshold1 and ep < erosionThreshold1)
     {
         return 4; // 結局4(侵蝕度低)
     }
