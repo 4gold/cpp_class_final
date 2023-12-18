@@ -100,7 +100,8 @@ int main()
 
 
     p.setRoom(Map::Room::ritualRoom);
-   
+
+
     
     evenInitializer();
     Event *startEvent = EventManager::getEvent(0);
@@ -159,6 +160,17 @@ int main()
 
         // 確認obj是否為存在此房間且可視的item 或 存在的房間
 
+        if (cmd == "testEnding") {        
+            // testing
+            g.interact(allItems["key_to_outside"]);
+            g.interact(allItems["piece_of_mirror_1"]);
+            g.interact(allItems["piece_of_mirror_2"]);
+            g.interact(allItems["piece_of_mirror_3"]);
+            ending = 1;
+
+            finalEvent->start(3);
+            continue;
+        }
         if (cmd == "switchMap")
         {
             if (!isValidRoom(obj))
@@ -336,80 +348,130 @@ int main()
                     itemsInCurrentRoom = m.roomItems[static_cast<Map::Room>(currentPlayerRoom)];
 
                     finalEvent->start(3);
-                    continue;
+                    break;
                 }
             }
         }
         else if (eventProgress == 3) // 儀式房 vs 篡位者
         {
             // 聽完提問過後的回答
-            int ans;
-            cin >> ans;
-
+            int ans = 0;
+            string ansStr;
+            while ( ans != 1 && ans != 2 && ans != 3) {        
+                cin >> ansStr;
+                if (ansStr.size() == 1 && isdigit(ansStr[0])) {
+                    ans = ansStr[0] - '0';
+                    if (ans == 1 || ans == 2 || ans == 3)
+                        break;
+                } 
+                cout << "請輸入有效的選項。" << endl;  
+            }
+            
             if (ans == 1) // 答對，準備被攻擊
             {   
-                cout << "台詞" << endl;
+                string dialogRightAns;
+                dialogRightAns.append("你：「漢森，我知道你不滿意我。」\n");
+                dialogRightAns.append("你指著地上的屍體，\n");
+                dialogRightAns.append("你：「但是我們都被教主騙了。」\n");
+                dialogRightAns.append("你：「我知道儀式失敗是你搞的鬼。現在所有人都有“神明”保佑了，你滿意了嗎？」\n");
+                dialogRightAns.append("你：「現在把東西給我。」");
+                dialogRightAns.append("你小心翼翼的哄騙他，你需要他手上的母蠱來解蠱。\n");
+
+                cout << dialogRightAns << endl;
                 p.updateHealthPoint(currentHp-10);
                 // 看還有沒有要做甚麼
 
-                if ((cmd == "attack" and obj == "usurper"))
+                cout << "按下 Enter 繼續" << endl;
+                cin.ignore();
+                
+                // 檢查玩家是否有鏡子1~3
+                int mirrorNum = 0;
+                for (int i = 0; i < numInBag; i++)
                 {
-                    // 檢查玩家是否有鏡子1~3
-                    int mirrorNum = 0;
-                    for (int i = 0; i < numInBag; i++)
+                    if ((bag[i]->getName() == "piece_of_mirror_1") || (bag[i]->getName() == "piece_of_mirror_2") || (bag[i]->getName() == "piece_of_mirror_3"))
                     {
-                        if ((bag[i]->getName() == "piece_of_mirror_1") or (bag[i]->getName() == "piece_of_mirror_2") or (bag[i]->getName() == "piece_of_mirror_3"))
-                        {
-                            mirrorNum++;
-                        }
+                        mirrorNum++;
                     }
-                    if (mirrorNum == 3) // 鏡子蒐集齊
+                }
+                if (mirrorNum == 3) // 鏡子蒐集齊
+                {   
+                    //g.attack(objItem); 
+                    if (ending == 1) // 侵蝕度高->結局1
                     {   
-                        g.attack(objItem); 
-                        if (ending == 1) // 侵蝕度高->結局1
-                        {   
-                            cout << "台詞" << endl;
-                            finalEvent->end(1, p, 4);
-                            finalEvent->turnoff();
-                            ending1->start(4);
-                            break;
-                        }
-                        else if (ending == 4) // 侵蝕度低->結局4
-                        {
-                            cout << "台詞" << endl;
-                            finalEvent->end(1, p, 7);
-                            finalEvent->turnoff();
-                            ending4->start(7);
-                            break;
-                        }
+                        vector<string> dialogWinHighErosion{
+                            "你試著壓制著漢森，但他的力氣異常的大，你鬥不過他。",
+                            "你想起了鏡子，拿出來對著他的臉。",
+                            "『不！』漢森大叫著退後，用害怕的雙手遮住了自己的臉。 ",
+                            "『這不是我！不要！』",
+                            "混亂中他身上的玻璃珠子掉在了地上，砸成了碎片。",
+                            "你趕緊蹲下來搜尋剩下的碎片，也不顧手被玻璃碎變渣的滿是鮮血。",
+                            "你找到了玻璃珠內的母蠱，正要吞下去時，你改變了主意。",
+                            "你覺得有點浪費。",
+                            "你：「嘿漢森，不然這樣好了。」",
+                            "你：「反正教主都死了，不如我們一起重建教會。」",
+                            "你：「你要神我要錢，雙贏。」",
+                            " ... ",
+                            " ... "
+                        };
+                        for (string dialog : dialogWinHighErosion)
+                            FuncPool::delayCout(dialog);
+                        finalEvent->end(1, p, 4);
+                        finalEvent->turnoff();
+                        ending1->start(4);
+                        break;
                     }
-                    else // 鏡子沒蒐集齊->結局2
+                    else if (ending == 4) // 侵蝕度低->結局4
                     {   
-                        cout << "台詞" << endl;
-                        finalEvent->end(1, p, 5);
+                        vector<string> dialogWinLowErosion{
+                            "你試著壓制著漢森，但他的力氣異常的大，你鬥不過他。",
+                            "你想起了鏡子，拿出來對著他的臉。",
+                            "『不！』漢森大叫著退後，用害怕的雙手遮住了自己的臉。 ",
+                            "『這不是我！不要！』",
+                            "混亂中他身上的玻璃珠子掉在了地上，砸成了碎片。",
+                            "你趕緊蹲下來搜尋剩下的碎片，也不顧手被玻璃碎變渣的滿是鮮血。",
+                            "你找到了玻璃珠內的母蠱，吞了下去。",
+                            "當你吞下蟲的瞬間，你聽到漢森絕望地叫了起來。",
+                            "你看到漢森開始溶解。",
+                            "『神...那是我的神...』",
+                            "漢森掙扎著爬向你，直到完全變成一灘血水。",
+                            " ... ",
+                            " ... "
+                        };
+
+                        for (string dialog : dialogWinLowErosion)
+                            FuncPool::delayCout(dialog);
+                                                
+                        finalEvent->end(1, p, 7);
                         finalEvent->turnoff();
                         ending4->start(7);
-                        alive = false;
                         break;
                     }
                 }
+                else // 鏡子沒蒐集齊->結局2
+                {   
+                    cout << "台詞" << endl;
+                    finalEvent->end(1, p, 5);
+                    finalEvent->turnoff();
+                    ending2->start(7);
+                    alive = false;
+                    break;
+                }
+                
             }
-            else if (ans == 2) // 答錯，進入結局2
-            {   
-                cout << "台詞" << endl;
+            else if (ans == 2 || ans == 3) // 答錯，進入結局3
+            {      
+                string wrongName = ((ans == 2) ? "傑米" : "巴特");
+                vector<string> dialogWrongAns {
+                    "你：「" + wrongName + "？」",
+                    "對方沒有回應你，冷冷的看了你一眼就走了。",
+                    "你摸不太清楚頭緒，用大門把鑰匙打開後沒有受到攔阻的離開了房間。"
+                    };
+                for (string dialog : dialogWrongAns)
+                FuncPool::delayCout(dialog);
+
                 finalEvent->end(1, p, 5);
                 finalEvent->turnoff();
-                ending4->start(7);
-                alive = false;
-                break;
-            }
-            else // 答錯，進入結局2
-            {
-                cout << "亂答台詞" << endl;
-                finalEvent->end(1, p, 5);
-                finalEvent->turnoff();
-                ending4->start(7);
-                alive = false;
+                ending3->start(7);
                 break;
             }
         }
@@ -424,8 +486,6 @@ int main()
                 // 更新現有房間內的物品
                 currentPlayerRoom = convertedNumber;
                 itemsInCurrentRoom = m.roomItems[static_cast<Map::Room>(currentPlayerRoom)];
-
-
                 continue;
             }
             else
@@ -487,26 +547,31 @@ void initializeAllKeyItems(map<string, Item*> &items, Player* player) {
     // 初始化static的預設對話
     HumanItem::initializeDefault();
     // ------------- key items ----------------------
+    // npcs
     int effect[4][3] = {{0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}};
     HumanItem* cook = new HumanItem("廚師", "cook", false, effect, 100, player);
     HumanItem* usurper = new HumanItem("漢森", "usurper", true, effect, 100, player);
     HumanItem* weird_grape_guy = new HumanItem("怪人", "weird_grape_guy", false, effect, 100, player);
-
+    // items
+    // ritual room
     int effect2[4][3] = {{0,0,0}, {-10,0,0}, {0,0,0}, {0,0,0}};
     PureItem* cabinet = new PureItem("木櫃子", "cabinet", false, effect2, true, false, 0);
     PureItem* long_candlestick = new PureItem("長燭台", "long_candlestick", false, false, true, 0);
-    PureItem* grape = new PureItem("葡萄", "grape", true, false, true, 0);
+    PureItem* god_pearl = new PureItem("降神珠", "god_pearl", true, false, true, 0);
 
+    // restaurant
+    PureItem* grape = new PureItem("葡萄", "grape", true, false, true, 0);
+    // leader room
     int effect3[4][3] = {{0,0,0}, {0,-10,10}, {0,0,0}, {0,-1,1}};
     PureItem* painting_on_wall = new PureItem("牆上的掛畫", "painting_on_wall", false, effect3, true, false, 0);
     PureItem* sculpture = new PureItem("雕像", "sculpture", false, true, false, 0);
-
+    // lab
     PureItem* diary_lab = new PureItem("實驗紀錄", "diary_lab", false, false, false, 6);
     PureItem* trash_can = new PureItem("垃圾桶", "trash_can", false, false, false, 0);
-    
+    // kitchen
     PureItem* key_to_outside = new PureItem("大門的鑰匙", "key_to_outside", false, false, true, 0);
     PureItem* sink = new PureItem("水槽", "sink", false, true, false, 0);
-
+    // protagonist's room
     PureItem* drawer = new PureItem("抽屜", "drawer", true, true, false, 0);
     PureItem* diary_player = new PureItem("日記", "diary_player", false, true, false, 6);
     PureItem* plush_toy = new PureItem("羊寶寶玩偶", "plush_toy", false, false, true, 0);
@@ -515,7 +580,6 @@ void initializeAllKeyItems(map<string, Item*> &items, Player* player) {
     PureItem* piece_of_mirror_2 = new PureItem("鏡子碎片2", "piece_of_mirror_2", true, false, true, 0); // lab
     PureItem* piece_of_mirror_3 = new PureItem("鏡子碎片3", "piece_of_mirror_3", true, false, true, 0); // kitchen
 
-    PureItem* god_pearl = new PureItem("降神珠", "god_pearl", true, false, true, 0);
 
     // -----------設定物品間交互--------------
     // 1. 篡位者交流後將降神珠設為可見
@@ -535,7 +599,6 @@ void initializeAllKeyItems(map<string, Item*> &items, Player* player) {
     //diary_lab->addRelatedItem(trash_can, RELATED_STATE::DISABLE);
     trash_can->addRelatedItem(piece_of_mirror_2, RELATED_STATE::DISABLE);
     
-
     // 6. 主角日記交流後出現抽屜
     diary_player->addRelatedItem(drawer, RELATED_STATE::DISABLE);
 
@@ -549,8 +612,9 @@ void initializeAllKeyItems(map<string, Item*> &items, Player* player) {
     // 9. 羊寶寶玩偶交流後廚師狀態變更
     plush_toy->addRelatedItem(cook, RELATED_STATE::PHASE);
 
-    // 10. 拿到大門鑰匙後
-    key_to_outside->addRelatedItem(god_pearl, RELATED_STATE::DISABLE);
+    // 10. 拿到大門鑰匙後，結局道具
+    key_to_outside->addRelatedItem(usurper, RELATED_STATE::DISABLE);
+    usurper->addRelatedItem(god_pearl, RELATED_STATE::DISABLE);
 
     // -------------------- insert items-------------------------------
     items.insert(pair<string, Item*>("cook", cook));
@@ -686,33 +750,75 @@ void evenInitializer()
     // 儀式房 vs 篡位者
 
     int finalEventLens;
-    vector<string> finalEventLines = {};
+    vector<string> finalEventLines = {
+        " 當你踏入儀式房時，發現有一個人先你一步來到這裡。",
+        " 那個人低著頭，你知道他發現你了，但卻沒有任何動作。",
+        " 當你想要繞開他從門離開時，你聽到他開口了：",
+        "『你知道你對我們來說多們不公平嗎？』",
+        "『我從小就待在這裡，總以為只要我努力，有一天神會看到我，結果呢？』", 
+        "『先是你的蠢朋友，再來是你，一個兩個廢物都搶在我前面。』", 
+        "『事情變成這樣都是你的錯，你就是該死。』",
+        " 你知道他是誰了，他是-- ",
+        " 請輸入正確的選項數字：(1) 韓森, (2) 傑米, (3)巴特 ",
+        "（提示：日記裡有提過。）"
+    };
 
     Event* finalEvent = new Event(finalEventLines, finalEventLens);
 
     // 結局1 3
 
     int ending1Lens;
-    vector<string> ending1Lines{};
+    vector<string> ending1Lines{
+        "你跟漢森一起建了新的霂亙教。",
+        "說是一起其實也是你一個人操控了一大群人當勞力。",
+        "而你為了操控那一大群人更加勞心勞力。",
+        "沒想到當教主比社畜更社畜。",
+        "但至少有很多人尊敬你，你的自尊心感到滿足。",
+        "Ending 1 - 我才是真正的神明"
+    };
 
     Event* ending1 = new Event(ending1Lines, ending1Lens);
 
     // 結局2 4
     int ending2Lens;
-    vector<string> ending2Lines{};
+    vector<string> ending2Lines{
+        "你試著壓制著漢森，但他的力氣異常的大，你鬥不過他。",
+        "『這樣神明就永遠跟我在一起了！』",
+        "漢森血紅著眼睛，癲狂的笑著把玻璃珠往嘴巴裡塞。",
+        "當他吞下玻璃珠的那刻，你開始感到頭昏。",
+        "你想抬起你的手，卻只看到曾經是手的東西正在滴答滴答的往下流。",
+        "你覺得你的視野慢慢地模糊。",
+        "你什麼也看不見了。",
+        "Ending 3 - 溶解"
+    };
 
     Event* ending2 = new Event(ending2Lines, ending2Lens);
 
     // 結局3 5
 
     int ending3Lens;
-    vector<string> ending3Lines{};
+    vector<string> ending3Lines{
+        "離開大門後，你回到了正常的世界，雖然你報了警，但沒有人找到你敘述的建築，一切的事就像一場惡夢一樣，沒留下半點痕跡。",
+        "你想要忘掉這一切，卻總覺得芒刺在背，無時不刻感覺受到注視。",
+        "你真的離開了嗎？",
+        "Ending 3 - 是誰在看我？"
+    };
 
     Event* ending3 = new Event(ending3Lines, ending3Lens);
     // 結局4 6
 
     int ending4Lens;
-    vector<string> ending4Lines{};
+    vector<string> ending4Lines{
+        
+        "你離開了教會。",
+        "你報了警，整棟建築充滿了血水，但除了儀式房的那句腐屍，沒有找到任何屍體。",
+        "事件造成了軒然大波，而你則低調的回到了正常生活。",
+        "你去醫院檢查過，身體一切正常。",
+        "雖然你的經歷不可能消失，但你可以感覺到他正慢慢變成淡漠的記憶。",
+        "神明不再存在了。"
+        "Ending 4 - 沒有神的人生"
+
+    };
 
     Event* ending4 = new Event(ending4Lines, ending4Lens);
 

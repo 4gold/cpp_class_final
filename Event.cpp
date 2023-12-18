@@ -10,7 +10,7 @@ Event::Event()
 Event::Event(vector<string> line, int l)
 {
     this->lines = line;
-    this->len = l;
+    this->len = line.size();
 }
 
 Event::~Event()
