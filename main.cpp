@@ -140,7 +140,7 @@ int main()
             break;
         }
         // testing value print
-        cout << "EventProgress : " << eventProgress << endl;
+        //cout << "EventProgress : " << eventProgress << endl;
 
         // 取得當前房間中的物品列表
         vector<Item*> itemsInCurrentRoom = m.roomItems[static_cast<Map::Room>(currentPlayerRoom)];
