@@ -110,7 +110,7 @@ string* DialogStrings::getDialogNPCString(const string name, const int phase) {
                 break;
             case 1:
                 setDialogStrings(ds, 
-                " \"我很嫉妒你, 你知道嗎?\"  ---@--@--- \"神從來看不到我, 我等了十年, 卻是你先入了神的眼?'\"",
+                "",
                 "",
                 "\"我等你很久了\"",
                 "一個面色陰沈的人，死死的盯著你。");
@@ -306,7 +306,191 @@ string* DialogStrings::getDialogPureItemString(const string name, const bool loc
             "19xx.10.11 \n實驗對象:S014, 14 歲, 男_報廢\n實驗方法:注射, 20ml \n實驗結果:注射後3分鐘開始嚴重的精神錯亂, 試圖攻擊實驗者 \n---@--@---19xx.10.12 \n實驗對象:S016, 13歲, 女_報廢\n實驗方法:注射, 10ml \n實驗結果:與S014相同\n\n備注:不是劑量問題,需要想別的方法\n---@--@---19xx.11.15\n實驗對象:S025, 12歲, 女\n實驗方法:以鮮血引導其主動進入受試者\n實驗結果:受試者產生強烈幻覺, 精神恍惚\n\n備註:S025受母蠱控制\n19xx.11.25\n加註:S025在看到反射物體時, 陷入嚴重的恐慌症, 移除房間內所有的反光物體\n---@--@---最後一頁是一行混亂的筆跡\n該死的, S025不見了! 其他實驗體也都融的一點不剩了! 到底怎麼回事!\n\n (這是最後一頁了) ",
             "一本記載著不明實驗紀錄的本子。");  
             break;
-
+//-------------------------- not key items----------------------------------
+        case "deadbody_ritaul_room"_hash:
+            setDialogStrings(ds, 
+            "你和屍體聊天，但他好像不想理你。",
+            "你踢了兩下屍體，沒有動。",
+            "你不想摸屍體。",
+            "一個被啃得面目全非的屍體，看得出衣著十分精緻。"
+            );
+            break;
+        case "basin"_hash:
+            setDialogStrings(ds, 
+            "「嗨？」你對著水面說話，沒有回應。",
+            "",
+            "你感受到一股溫暖的氣息，撫慰了你的精神。",
+            "石製的高大落地水盆，裡面的水有些污濁。"
+            );
+            break;
+        case "door_to_outside"_hash:
+            setDialogStrings(ds, 
+            "用敲的感覺都能得到更多回應。",
+            "使勁吃奶的力氣都無法把它砸開",
+            "你敲了幾下，沉悶的回應在房中迴盪。",
+            "從門框透進來微弱的光，當你再靠近一些，聞到了一些草的味道，這扇門似乎通往室外。"
+            );
+            break;
+        case "table_restaurant"_hash:
+            setDialogStrings(ds, 
+            "跟桌子說話，旁邊的人大概會誤會你在跟他講話。",
+            "你踢了一下餐桌，震的所有吃飯的人一抖。",
+            "你用手指敲了敲桌面，是堅硬的實心木桌。",
+            "桌子很大，一次可供十幾個人使用。"
+            );
+            break;
+        case "door_resraurant_to_east_hallway"_hash:
+            setDialogStrings(ds, 
+            "並沒有通關密語。",
+            "沒有辦法踹開。",
+            "",
+            "應該是通往東長廊，需要鑰匙才能打開。(4)"
+            );
+            break;
+        case "door_resraurant_to_kitchen"_hash:
+            if (lock)
+                setDialogStrings(ds, 
+                "並沒有通關密語。",
+                "它可以正常的打開，不要這麼暴力。",
+                "廚師就站在門前，得先支開他。",
+                "物品。"
+                );
+            else 
+                setDialogStrings(ds, 
+                "並沒有通關密語。",
+                "它可以正常的打開，不要這麼暴力。",
+                "可以進去了",
+                "通往廚房(3)"
+                );
+                break;
+        case "door_resraurant_to_storage"_hash:
+            setDialogStrings(ds, 
+            "",
+            "",
+            "",
+            "通往儲藏室(1)"
+            );
+            break;  
+        case "door_storage_to_restaurant"_hash:
+            setDialogStrings(ds, 
+            "",
+            "",
+            "",
+            "通往餐廳(2)"
+            );
+            break;  
+        case "watermelon"_hash:
+            setDialogStrings(ds, 
+            "你在西瓜上印了個掌印\n「 Willson! 」\n西瓜沒有回應。",
+            "你想到廚師兇惡的臉，還是不搞破壞了。",
+            "你使盡力氣也抬不起來。",
+            "很大的西瓜。"
+            );
+            break;     
+        case "door_leader_to_west_hallway"_hash:
+            setDialogStrings(ds, 
+            "",
+            "",
+            "",
+            "通往西長廊(5)"
+            );
+            break;  
+        case "carpet"_hash:
+            setDialogStrings(ds, 
+            "",
+            "你偷偷的在地毯上劃了幾刀。",
+            "你掀起地毯，想看看有沒有偷藏什麼東西在下面，但結果讓你失望了。",
+            "一塊看起來就很貴的鹿皮地毯。"
+            );
+            break; 
+        case "bed_leader_room"_hash:
+            setDialogStrings(ds, 
+            "床是用來躺的，不是用來聊天的。",
+            "你用力的揍了兩下床，床墊軟的不像話。",
+            "躺上去，這床超舒服，休息一會兒。",
+            "天哪!是超大雙人床!"
+            );
+            break;
+        case "weird_cups"_hash:
+            setDialogStrings(ds, 
+            "問了它有沒有毒，沒有得到回應。",
+            "打破的話後果難以預料，再想一下。",
+            "不敢打開，說不定會飄出有毒氣體。",
+            "應該是某種特殊的藥劑。"
+            );
+            break;
+        case "bed_lab"_hash:
+            setDialogStrings(ds, 
+            "蓋棉被純聊天......沒有棉被也沒有聊天對象。",
+            "你用力的揍了兩下床，打到了支架，震的你手痛。",
+            "躺上去，很硬，這個床頂多2分。",
+            "一個看起來就很硬的實驗用床，床單上有不明液體的痕跡。"
+            );
+            break;
+        case "door_lab_to_leader"_hash:
+            setDialogStrings(ds, 
+            "",
+            "",
+            "",
+            "通往奢華的房間(8)"
+            );
+            break;
+        case "door_player_to_east_hallway"_hash:
+            setDialogStrings(ds, 
+            "",
+            "",
+            "",
+            "通往東長廊(4)"
+            );
+            break;
+        case "bed_player_room"_hash:
+            setDialogStrings(ds, 
+            "床是用來躺的，不是用來聊天的。",
+            "你用力的揍了兩下床，感覺床架快散了。",
+            "躺上去，有種熟悉的感覺，讓你感到昏昏欲睡。",
+            "一張陳舊的木床，床墊不怎麼厚。"
+            );
+            break;
+        case "door_kitchen_to_restaurant"_hash:
+            setDialogStrings(ds, 
+            "",
+            "",
+            "",
+            "通往餐廳的門(2)"
+            );
+            break;
+        case "dirty_paper"_hash:
+            setDialogStrings(ds, 
+            "紙條用上面的字回應了你，完全是雞同鴨講。",
+            "先看看上面寫了什麼吧。",
+            "你勉強用兩根指頭夾起來閱讀，身體的其他地方都抗拒碰到它。上面的字跡潦草而混亂。\n“我吃掉了他們用來做引子的那東西，沒想到那東西就是解藥。真該讓大家都看看那些老家氣瘋的樣子”",
+            "某個人匆忙間留下的字條，被塞在冰箱下的縫隙裡。"
+            );
+            break;
+        case "door_west_hallway_to_leader"_hash:
+            setDialogStrings(ds, 
+            "",
+            "",
+            "",
+            "被精緻雕刻的門，一眼能看出價格不菲。(8)"
+            );
+            break;
+        case "door_east_hallway_to_player"_hash:
+            setDialogStrings(ds, 
+            "",
+            "",
+            "",
+            "通往舊房間(6)"
+            );
+            break;
+        case "door_east_hallway_to_restaurant"_hash:
+            setDialogStrings(ds, 
+            "",
+            "",
+            "",
+            "通往餐廳(2)"
+            );
+            break;
         case "default"_hash:
             if (lock)
                 setDialogStrings(ds, 
@@ -323,6 +507,7 @@ string* DialogStrings::getDialogPureItemString(const string name, const bool loc
                 "你已經使用過這個道具。"
                 );
             break;
+ 
         
         default:
             setDialogStrings(ds, 

@@ -17,8 +17,8 @@ Map::Map() {
     roomConnections[make_pair(eastCorridor, protagonistRoom)] = true;
     roomConnections[make_pair(protagonistRoom, eastCorridor)] = true;
 
-    roomConnections[make_pair(eastCorridor, usurperRoom)] = true;
-    roomConnections[make_pair(usurperRoom, eastCorridor)] = true;
+    roomConnections[make_pair(eastCorridor, usurperRoom)] = false;
+    roomConnections[make_pair(usurperRoom, eastCorridor)] = false;
 
     roomConnections[make_pair(leaderRoom, westCorridor)] = true;
     roomConnections[make_pair(westCorridor, leaderRoom)] = true;

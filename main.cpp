@@ -356,7 +356,7 @@ int main()
         {
             // 聽完提問過後的回答
             int ans = 0;
-            string ansStr;
+            string ansStr = cmd;
             while ( ans != 1 && ans != 2 && ans != 3) {        
                 cin >> ansStr;
                 if (ansStr.size() == 1 && isdigit(ansStr[0])) {
@@ -464,7 +464,9 @@ int main()
                 vector<string> dialogWrongAns {
                     "你：「" + wrongName + "？」",
                     "對方沒有回應你，冷冷的看了你一眼就走了。",
-                    "你摸不太清楚頭緒，用大門把鑰匙打開後沒有受到攔阻的離開了房間。"
+                    "你摸不太清楚頭緒，用大門把鑰匙打開後沒有受到攔阻的離開了房間。",
+                    "...",
+                    "..."
                     };
                 for (string dialog : dialogWrongAns)
                 FuncPool::delayCout(dialog);
