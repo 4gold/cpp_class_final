@@ -11,6 +11,7 @@ using namespace std;
 // 定義Map類別，代表地圖
 class Map {
 private:
+    string leaderRoomDescription;
    
 public:
     // 在指定房間添加物品，依序為0-8號 

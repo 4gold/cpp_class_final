@@ -94,8 +94,8 @@ int main()
     Story story = Story();
     
     map<string, Item*> allItems;
-    initializeAllKeyItems(allItems, pPtr);
     initializeAllNoneKeyItems(allItems, m);
+    initializeAllKeyItems(allItems, pPtr);
     putKeyItemsInRoom(allItems, m);
 
 
@@ -160,7 +160,7 @@ int main()
 
         // 確認obj是否為存在此房間且可視的item 或 存在的房間
 
-        if (cmd == "testEnding") {        
+        if (cmd == "testEnding") {
             // testing
             g.interact(allItems["key_to_outside"]);
             g.interact(allItems["piece_of_mirror_1"]);
@@ -731,7 +731,8 @@ void evenInitializer()
         "『不然還有誰！除了你還有誰！』",
         " 你 : 「真的不是我，我不知道！」",
         " 他沈默了幾秒後，當你以為他被說服了，卻又開始繼續大叫",
-        " ：『我要我的葡萄！沒有葡萄就沒人可以離開！』"
+        " ：『我要我的葡萄！沒有葡萄就沒人可以離開！』",
+        " 看來你不得不幫他了，也許剛剛經過的儲藏室裡會有葡萄？"
         };
 
     Event* kitchen = new Event(kitchenLines, kitchenLen);

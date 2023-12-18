@@ -1,4 +1,5 @@
 #include "map.h"
+#include "Event.h"
 
 Map::Map() {
     // 初始化房間之間的連接狀態
@@ -28,6 +29,9 @@ Map::Map() {
     
     roomConnections[make_pair(restaurant, kitchen)] = false;
     roomConnections[make_pair(kitchen, restaurant)] = false;
+    
+    leaderRoomDescription = "你來到一個燈光明亮的房間，一進門就看到一尊比你還高了半個頭的神像擺在門邊，靜靜地注視著來訪的客人們。\n房內的擺設優雅且奢華，地板上甚至有一張雄皮地毯，跟外面的破敗景象形成強烈的對比。\n直直望向房間的底部，一張大型掛畫幾乎遮住了整面牆。";
+
 }
 
  void Map::updateConnection(int value) {
@@ -96,7 +100,9 @@ bool Map::isValidMove(Room currentRoom, Room nextRoom) {
                 break;
             case 8:
                 FuncPool::readAndPrintFile("主教房ASCII.txt");
-                cout<<"你來到一個燈光明亮的房間，一進門就看到一尊比你還高了半個頭的神像擺在門邊，靜靜地注視著來訪的客人們。\n房內的擺設優雅且奢華，地板上甚至有一張雄皮地毯，跟外面的破敗景象形成強烈的對比。\n直直望向房間的底部，一張大型掛畫幾乎遮住了整面牆。"<<endl;
+                if (Event::progressing == -10)
+                    leaderRoomDescription = "你來到一個燈光明亮的房間，一進門就看到一尊比你還高了半個頭的神像擺在門邊，靜靜地注視著來訪的客人們。\n房內的擺設優雅且奢華，地板上甚至有一張雄皮地毯，跟外面的破敗景象形成強烈的對比。\n直直望向房間的底部，一張大型掛畫被撕裂，露出後面的隱藏房間。";
+                cout << leaderRoomDescription << endl;
                 break;
             case 9:
                 FuncPool::readAndPrintFile("實驗室ASCII.txt");
